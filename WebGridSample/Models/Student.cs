@@ -7,22 +7,40 @@ using System.Data.SqlClient;
 
 namespace WebGridSample.Models
 {
-    public class Student
+    public class StudentVm
     {
-        public int ID { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public bool IsActive { get; set; }
+        public int page = 0, RowCount = 0;
+        public string sort = "", sortdir = "";
+        public int PageSize = 10;
+        public IList<Student> Students { get; set; }
 
-        public IList<Student> GetStudents()
+
+        public IList<Student> GetStudents(StudentVm oSVm)
         {
+            int StartIndex = 0, EndIndex = 0;
+
+            if (oSVm.page == 0)
+                page = 1;
+
+            StartIndex = ((oSVm.page * oSVm.PageSize) - oSVm.PageSize) + 1;
+            EndIndex = (oSVm.page * oSVm.PageSize);
+
+            if (oSVm.sort == "")
+                oSVm.sort = "ID";
+
+            if (oSVm.sortdir == "")
+                oSVm.sortdir = "ASC";
+
             string connectionStringName = System.Configuration.ConfigurationManager.ConnectionStrings["StudentDBContext"].ConnectionString;
             IList<Student> _Student = new List<Student>();
+
+            string strSQL = "SELECT ID, FirstName,LastName,IsActive FROM Student WHERE ID >=" + StartIndex+ " AND ID <="+ EndIndex;
+            strSQL += " ORDER BY " + oSVm.sort + " " + oSVm.sortdir;
 
             using (SqlConnection connection = new SqlConnection(connectionStringName))
             {
                 SqlCommand command = new SqlCommand(
-                  "SELECT ID, FirstName,LastName,IsActive FROM Student;", connection);
+                  ";", connection);
 
                 connection.Open();
 
@@ -43,14 +61,16 @@ namespace WebGridSample.Models
                 }
                 reader.Close();
             }
-
+            RowCount = _Student.Count;
             return _Student;
         }
+    }
 
-        
-
-        public Student()
-        {
-        }
+    public class Student
+    {
+        public int ID { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public bool IsActive { get; set; }
     }
 }

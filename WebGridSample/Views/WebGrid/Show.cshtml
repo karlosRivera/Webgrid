@@ -1,4 +1,4 @@
-﻿@model  IList<WebGridSample.Models.Student>
+﻿@model  WebGridSample.Models.StudentVm
 @{
     ViewBag.Title = "Show";
 }
@@ -46,6 +46,9 @@
 
 @{
     var grid = new WebGrid(Model);
+    WebGrid studentGrid = new WebGrid(rowsPerPage: 10);
+    studentGrid.Bind(Model., autoSortAndPage: false, rowCount: Model.RowCo);
+    studentGrid.PageIndex = Model.CurrentPage;
 }
 
 <div id="gridContent" style=" padding:20px; ">
@@ -63,7 +66,8 @@
             grid.Column(columnName: "FirstName", header: "First Name", format: @<text>@item.FirstName</text> ),
             grid.Column(columnName: "LastName", header: "Last Name", format: @<text>@item.LastName</text>),
             grid.Column(header: "IsActive",
-            format: @<text><input id="select" class="box" name="select" type="checkbox" value="@item.IsActive" /></text>,
-            style: "text-center checkbox-width")
-            ))
+            format: @<text><input id="select" class="box" name="select" type="checkbox" @(item.IsActive ? "checked='checked'" : "") value="@item.IsActive" /></text>,
+                style: "text-center checkbox-width")
+                ))
 </div>
+

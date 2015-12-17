@@ -10,12 +10,11 @@ namespace WebGridSample.Controllers
     public class WebGridController : Controller
     {
         // GET: WebGrid
-        public ActionResult Show()
+        public ActionResult Show(StudentVm oSVm)
         {
-
-
-            IList<Student> oStudent = new Student().GetStudents();
-            return View(oStudent);
+            StudentVm SVm = new StudentVm(); //.GetStudents(oSVm);
+            SVm.Students= SVm.GetStudents(oSVm);
+            return View(SVm);
         }
     }
 
