@@ -6,6 +6,7 @@
 
 
 <style type="text/css">
+
     .webgrid-table {
         font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
         font-size: 1.2em;
@@ -27,10 +28,19 @@
         padding-bottom: 4px;
         padding-top: 5px;
         text-align: left;
+        text-decoration: none;
     }
+
+        .webgrid-header a:hover {
+            text-decoration: none;
+        }
 
     .webgrid-footer {
     }
+
+        .webgrid-footer a:hover {
+            text-decoration: none;
+        }
 
     .webgrid-row-style {
         padding: 3px 7px 2px;
@@ -40,19 +50,29 @@
         background-color: #EAF2D3;
         padding: 3px 7px 2px;
     }
+
+    .SmallCols {
+        width: 10%;
+    }
+
+    .NameColWidth {
+        width: 20%;
+    }
+
 </style>
 
-<h2>Show</h2>
+<h2>Sample WebGrid Demo</h2>
 
 @{
-    var grid = new WebGrid(Model);
-    WebGrid studentGrid = new WebGrid(rowsPerPage: 10);
-    studentGrid.Bind(Model., autoSortAndPage: false, rowCount: Model.RowCo);
-    studentGrid.PageIndex = Model.CurrentPage;
+    WebGrid grid = new WebGrid(null, rowsPerPage: Model.PageSize, canPage: true, defaultSort: Model.sort); //, ajaxUpdateContainerId: "gridContent"
+    grid.Bind(Model.Students, autoSortAndPage: false, rowCount: Model.RowCount);
+    //grid.PageIndex = Model.CurrentPage;
 }
 
-<div id="gridContent" style=" padding:20px; ">
-    @grid.GetHtml(
+@using (@Html.BeginForm("Show", "WebGrid", FormMethod.Post, new { @id = "frmDetails" }))
+{
+    <div id="gridContent" style=" padding:20px; ">
+        @grid.GetHtml(
         tableStyle: "webgrid-table",
         headerStyle: "webgrid-header",
         footerStyle: "webgrid-footer",
@@ -60,14 +80,53 @@
         selectedRowStyle: "webgrid-selected-row",
         rowStyle: "webgrid-row-style",
         mode: WebGridPagerModes.All,
+        firstText: "<<",
+        previousText: "<",
+        nextText: ">",
+        lastText: ">>", 
+        numericLinksCount: 5,       
         columns:
-            grid.Columns(
-            grid.Column(columnName: "ID", header: "ID", format: @<text>@item.ID</text>),
-            grid.Column(columnName: "FirstName", header: "First Name", format: @<text>@item.FirstName</text> ),
-            grid.Column(columnName: "LastName", header: "Last Name", format: @<text>@item.LastName</text>),
+            grid.Columns
+            (
+            grid.Column(columnName: "ID", header: "ID", format: @<text>@item.ID</text>,style:"SmallCols"),
+            grid.Column(columnName: "FirstName", header: "First Name", format: @<text>@item.FirstName</text>,style:"NameColWidth" ),
+            grid.Column(columnName: "LastName", header: "Last Name", format: @<text>@item.LastName</text>,style:"NameColWidth"),
+            
+            grid.Column(columnName: "StateName", header: "State Name", format: @<text>@item.StateName</text>,style:"NameColWidth"),
+            grid.Column(columnName: "CityName", header: "City Name", format: @<text>@item.CityName</text>,style:"NameColWidth"),
             grid.Column(header: "IsActive",
-            format: @<text><input id="select" class="box" name="select" type="checkbox" @(item.IsActive ? "checked='checked'" : "") value="@item.IsActive" /></text>,
-                style: "text-center checkbox-width")
-                ))
-</div>
+            format: @<text><input id="select" class="box" name="select" type="checkbox" @(item.IsActive ? "checked='checked'" : "") value="@item.IsActive" /></text>
+                              , style: "text-center checkbox-width SmallCols")
 
+                     ))
+
+        @Html.Hidden("dir", grid.SortDirection)
+        @Html.Hidden("col", grid.SortColumn)
+        @Html.Hidden("page", Model.CurrentPage)
+    </div>
+
+}
+
+
+
+@section scripts{
+
+    <script type="text/javascript">
+    $(document).ready(function () {
+        setArrows();
+    });
+
+    function setArrows() {
+        var dir = $('#dir').val();
+        var col = $('#col').val();
+        var header = $('th a[href*=' + col + ']');
+        if (dir == 'Ascending') {
+            header.text(header.text() + ' ▲');
+        }
+        if (dir == 'Descending') {
+            header.text(header.text() + ' ▼');
+        }
+    };
+
+    </script>
+}
