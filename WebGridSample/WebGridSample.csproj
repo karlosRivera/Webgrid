@@ -179,7 +179,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="images\back.png" />
     <Content Include="images\first.png" />
-    <Content Include="images\forward.png" />
+    <Content Include="images\next.png" />
     <Content Include="images\last.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />

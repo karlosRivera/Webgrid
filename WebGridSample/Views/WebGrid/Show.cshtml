@@ -113,10 +113,36 @@
 
     <script type="text/javascript">
     $(document).ready(function () {
-        setArrows();
+        SetSortArrows();
+        SetPagerNavImage();
+        SetUpQueryString();
     });
 
-    function setArrows() {
+    function SetPagerNavImage()
+    {
+        $(".webgrid-footer a").each(function () {
+            var text = $(this).text().trim();
+            if (text == "<<") {
+                $(this).html('<img src="/images/first.png"/>');
+            }
+
+            if (text == ">>") {
+                $(this).html('<img src="/images/last.png"/>');
+            }
+
+            if (text == "<") {
+                $(this).html('<img src="/images/back.png"/>');
+            }
+
+            if (text == ">") {
+                $(this).html('<img src="/images/next.png"/>');
+            }
+
+        });
+
+    }
+
+    function SetSortArrows() {
         var dir = $('#dir').val();
         var col = $('#col').val();
         var header = $('th a[href*=' + col + ']');
@@ -127,6 +153,23 @@
             header.text(header.text() + ' ▼');
         }
     };
+
+    function SetUpQueryString()
+    {
+        $(".webgrid-header a").each(function () {
+            this.href = this.href + '&page=' + $('#page').val();
+        });
+
+        $(".webgrid-footer a").each(function () {
+            var res = this.href.split("&");
+            if(res.length<=1)
+            {
+                this.href = this.href + '&sort=' + $('#col').val() + '&sortdir=' + $('#dir').val();
+            }
+            //this.href = this.href + '&page=' + $('#page').val();
+        });
+
+    }
 
     </script>
 }
