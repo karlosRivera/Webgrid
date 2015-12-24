@@ -22,3 +22,9 @@ http://geekswithblogs.net/jdothoffman/archive/2011/04/01/mvc-3-updating-the-cont
 http://www.byteblocks.com/Post/Ajax-loading-of-MVC-WebGrid-in-partial-view
 http://www.authorcode.com/convert-mvc-webgrid-data-into-json-string-and-use-it-in-controller/
 http://www.mikesdotnetting.com/article/223/adding-a-new-row-in-the-razor-webgrid
+
+
+http://www.danylkoweb.com/Blog/aspnet-mvc-enhancing-the-webgrid-lazy-loading-with-webapi-A4
+http://www.mikesdotnetting.com/article/193/working-with-entity-framework-code-first-and-json-in-asp-net-web-pages
+http://shahvaibhav.com/how-to-bind-the-dropdown-list-with-webgrid-in-asp-net-mvc3-razor/
+https://www.atlanticbt.com/blog/asp-net-mvc-using-ajax-json-and-partialviews/
