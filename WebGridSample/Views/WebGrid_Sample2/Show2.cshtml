@@ -1,7 +1,20 @@
-﻿
+﻿@model  WebGridSample.Models.StudentVm
+
 @{
     ViewBag.Title = "Show2";
 }
+<link href="~/Content/WebGridStyle.css" rel="stylesheet" />
 
 <h2>Show2</h2>
 
+
+@using (@Html.BeginForm("Show2", "WebGrid_Sample2", FormMethod.Post, new { @id = "frmDetails" }))
+{
+    <div id="gridContent" style=" padding:20px; ">
+        @Html.Partial("_GridSample1")
+    </div>
+}
+
+@section scripts{
+    <script src="~/Scripts/Personal/GridHandlder1.js"></script>
+}

@@ -19,3 +19,4 @@ http://www.codeproject.com/Articles/875859/Insert-Update-and-Delete-MVC-WebGrid-
 http://galratner.com/blogs/net/archive/2011/12/02/reloading-a-razor-webgrid-after-ajax-calls-using-a-partial-view.aspx
 http://www.byteblocks.com/Post/Ajax-loading-of-MVC-WebGrid-in-partial-view
 http://geekswithblogs.net/jdothoffman/archive/2011/04/01/mvc-3-updating-the-content-of-a-webgri
+http://www.byteblocks.com/Post/Ajax-loading-of-MVC-WebGrid-in-partial-view

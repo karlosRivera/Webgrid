@@ -1,23 +1,14 @@
 ﻿@model  WebGridSample.Models.StudentVm
+
+
 @{
-    ViewBag.Title = "Show";
-}
-
-<link href="~/Content/WebGridStyle.css" rel="stylesheet" />
-
-
-
-<h2>Sample WebGrid Demo</h2>
-
-@using (@Html.BeginForm("Show1", "WebGrid_Sample1", FormMethod.Post, new { @id = "frmDetails" }))
-{
-
     WebGrid grid = new WebGrid(null, rowsPerPage: Model.PageSize, canPage: true,
         defaultSort: Model.sort, ajaxUpdateContainerId: "gridContent", ajaxUpdateCallback: "initScripts"); //, ajaxUpdateContainerId: "gridContent"
     grid.Bind(Model.Students, autoSortAndPage: false, rowCount: Model.RowCount);
-        
-    <div id="gridContent" style=" padding:20px; ">
-        @grid.GetHtml(
+}
+
+
+    @grid.GetHtml(
         tableStyle: "webgrid-table",
         headerStyle: "webgrid-header",
         footerStyle: "webgrid-footer",
@@ -28,30 +19,26 @@
         firstText: "<<",
         previousText: "<",
         nextText: ">",
-        lastText: ">>", 
-        numericLinksCount: 5,       
+        lastText: ">>",
+        numericLinksCount: 5,
         columns:
             grid.Columns
             (
             grid.Column(columnName: "ID", header: "ID", format: @<text>@item.ID</text>,style:"SmallCols"),
             grid.Column(columnName: "FirstName", header: "First Name", format: @<text>@item.FirstName</text>,style:"NameColWidth" ),
             grid.Column(columnName: "LastName", header: "Last Name", format: @<text>@item.LastName</text>,style:"NameColWidth"),
-            
+
             grid.Column(columnName: "StateName", header: "State Name", format: @<text>@item.StateName</text>,style:"NameColWidth"),
             grid.Column(columnName: "CityName", header: "City Name", format: @<text>@item.CityName</text>,style:"NameColWidth"),
             grid.Column(header: "IsActive",
             format: @<text><input id="select" class="box" name="select" type="checkbox" @(item.IsActive ? "checked='checked'" : "") value="@item.IsActive" /></text>
-                              , style: "text-center checkbox-width SmallCols")
+                               , style: "text-center checkbox-width SmallCols")
 
-                     ))
+                      ))
 
-        @Html.Hidden("dir", grid.SortDirection)
-        @Html.Hidden("col", grid.SortColumn)
-        @Html.Hidden("page", Model.CurrentPage)
-    </div>
-}
+    @Html.Hidden("dir", grid.SortDirection)
+    @Html.Hidden("col", grid.SortColumn)
+    @Html.Hidden("page", Model.CurrentPage)
 
 
-@section scripts{
-    <script src="~/Scripts/Personal/GridHandlder1.js"></script> 
-}
+
