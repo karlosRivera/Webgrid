@@ -209,7 +209,7 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\WebGrid\Show.cshtml" />
+    <Content Include="Views\WebGrid_Sample1\Show.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

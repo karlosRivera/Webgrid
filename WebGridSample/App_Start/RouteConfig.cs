@@ -16,7 +16,7 @@ namespace WebGridSample
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "WebGrid", action = "Show", id = UrlParameter.Optional }
+                defaults: new { controller = "WebGrid_Sample1", action = "Show", id = UrlParameter.Optional }
             );
         }
     }

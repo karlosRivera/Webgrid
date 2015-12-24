@@ -7,7 +7,7 @@ using WebGridSample.Models;
 
 namespace WebGridSample.Controllers
 {
-    public class WebGridController : Controller
+    public class WebGrid_Sample1Controller : Controller
     {
         // GET: WebGrid
         public ActionResult Show(StudentVm oSVm)

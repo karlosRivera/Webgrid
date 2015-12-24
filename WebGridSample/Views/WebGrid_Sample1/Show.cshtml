@@ -64,7 +64,7 @@
 <h2>Sample WebGrid Demo</h2>
 
 @{
-    WebGrid grid = new WebGrid(null, rowsPerPage: Model.PageSize, canPage: true, defaultSort: Model.sort); //, ajaxUpdateContainerId: "gridContent"
+    WebGrid grid = new WebGrid(null, rowsPerPage: Model.PageSize, canPage: true, defaultSort: Model.sort, ajaxUpdateContainerId: "gridContent", ajaxUpdateCallback: "initScripts"); //, ajaxUpdateContainerId: "gridContent"
     grid.Bind(Model.Students, autoSortAndPage: false, rowCount: Model.RowCount);
     //grid.PageIndex = Model.CurrentPage;
 }
@@ -104,72 +104,85 @@
         @Html.Hidden("col", grid.SortColumn)
         @Html.Hidden("page", Model.CurrentPage)
     </div>
-
 }
-
 
 
 @section scripts{
 
     <script type="text/javascript">
-    $(document).ready(function () {
-        SetSortArrows();
-        SetPagerNavImage();
-        SetUpQueryString();
-    });
-
-    function SetPagerNavImage()
-    {
-        $(".webgrid-footer a").each(function () {
-            var text = $(this).text().trim();
-            if (text == "<<") {
-                $(this).html('<img src="/images/first.png"/>');
-            }
-
-            if (text == ">>") {
-                $(this).html('<img src="/images/last.png"/>');
-            }
-
-            if (text == "<") {
-                $(this).html('<img src="/images/back.png"/>');
-            }
-
-            if (text == ">") {
-                $(this).html('<img src="/images/next.png"/>');
-            }
-
+        $(document).ready(function () {
+            initScripts();
         });
 
-    }
-
-    function SetSortArrows() {
-        var dir = $('#dir').val();
-        var col = $('#col').val();
-        var header = $('th a[href*=' + col + ']');
-        if (dir == 'Ascending') {
-            header.text(header.text() + ' ▲');
+        function initScripts()
+        {
+            SetSortArrows();
+            SetPagerNavImage();
+            SetUpNavQueryString();
         }
-        if (dir == 'Descending') {
-            header.text(header.text() + ' ▼');
+
+        function SetPagerNavImage()
+        {
+            $(".webgrid-footer a").each(function () {
+                var text = $(this).text().trim();
+                if (text == "<<") {
+                    $(this).html('<img src="/images/first.png"/>');
+                }
+
+                if (text == ">>") {
+                    $(this).html('<img src="/images/last.png"/>');
+                }
+
+                if (text == "<") {
+                    $(this).html('<img src="/images/back.png"/>');
+                }
+
+                if (text == ">") {
+                    $(this).html('<img src="/images/next.png"/>');
+                }
+
+            });
         }
-    };
 
-    function SetUpQueryString()
-    {
-        $(".webgrid-header a").each(function () {
-            this.href = this.href + '&page=' + $('#page').val();
-        });
-
-        $(".webgrid-footer a").each(function () {
-            var res = this.href.split("&");
-            if(res.length<=1)
-            {
-                this.href = this.href + '&sort=' + $('#col').val() + '&sortdir=' + $('#dir').val();
+        function SetSortArrows() {
+            var dir = $('#dir').val();
+            var col = $('#col').val();
+            //alert(col);
+            var header = $('th a[href*=' + col + ']');
+            if (dir == 'Ascending') {
+                header.text(header.text() + ' ▲');
             }
-            //this.href = this.href + '&page=' + $('#page').val();
-        });
+            if (dir == 'Descending') {
+                header.text(header.text() + ' ▼');
+            }
+        }
 
-    }
+        function SetUpNavQueryString()
+        {
+            $(".webgrid-header a").each(function () {
+                this.href = this.href + '&page=' + $('#page').val();
+            });
+
+            $(".webgrid-footer a").each(function () {
+                var res = this.href.split("&");
+                var ColOrder='';
+                if(res.length<=1)
+                {
+                    if($('#dir').val()==='Ascending')
+                    {
+                        ColOrder='ASC';
+                    }
+                    else if($('#dir').val()==='Descending')
+                    {
+                        ColOrder='DESC';
+                    }
+
+                    this.href = this.href + '&sort=' + $('#col').val() + '&sortdir=' + ColOrder;
+                }
+                //this.href = this.href + '&page=' + $('#page').val();
+            });
+
+        }
 
     </script>
 }
