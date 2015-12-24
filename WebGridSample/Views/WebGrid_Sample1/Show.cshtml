@@ -64,7 +64,8 @@
 <h2>Sample WebGrid Demo</h2>
 
 @{
-    WebGrid grid = new WebGrid(null, rowsPerPage: Model.PageSize, canPage: true, defaultSort: Model.sort, ajaxUpdateContainerId: "gridContent", ajaxUpdateCallback: "initScripts"); //, ajaxUpdateContainerId: "gridContent"
+    WebGrid grid = new WebGrid(null, rowsPerPage: Model.PageSize, canPage: true, 
+        defaultSort: Model.sort, ajaxUpdateContainerId: "gridContent", ajaxUpdateCallback: "initScripts"); //, ajaxUpdateContainerId: "gridContent"
     grid.Bind(Model.Students, autoSortAndPage: false, rowCount: Model.RowCount);
     //grid.PageIndex = Model.CurrentPage;
 }
