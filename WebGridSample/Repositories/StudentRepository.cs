@@ -37,6 +37,20 @@ namespace DataLayer.Repository
             }
         }
 
+        public IEnumerable<Student> SaveXML(string strXML,int startindex,int endindex,string sortcol,string sortorder)
+        {
+            // PARAMETERIZED QUERIES!
+            using (var command = new SqlCommand("upsUpdateData"))
+            {
+                command.Parameters.Add(new ObjectParameter("strXML", strXML));
+                command.Parameters.Add(new ObjectParameter("startindex", startindex));
+                command.Parameters.Add(new ObjectParameter("endindex", endindex));
+                command.Parameters.Add(new ObjectParameter("sortcol", sortcol));
+                command.Parameters.Add(new ObjectParameter("sortorder", sortorder));
+                return ExecuteStoredProc(command);
+            }
+        }
+
         public IEnumerable<Student> GetStudents(int StartIndex, int EndIndex, string sortCol, string sortOrder)
         {
             string strSQL = "SELECT * FROM vwListStudents WHERE ID >=" + StartIndex + " AND ID <=" + EndIndex;

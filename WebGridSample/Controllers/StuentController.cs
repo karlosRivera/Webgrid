@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using WebGridSample.Models;
 using DataLayer.Repository;
+using WebGridSample.Utility;
 
 namespace WebGridSample.Controllers
 {
@@ -33,6 +34,15 @@ namespace WebGridSample.Controllers
             SVm.RowCount = _Studentdata.DataCounter;
 
             return View("ListStudents",SVm);
+        }
+
+        public ActionResult UpdateSingleStudent(StudentListViewModel oSVm)
+        {
+            System.Threading.Thread.Sleep(1000); // just simulate delay of one second
+            StudentListViewModel SVm = new StudentListViewModel();
+            SVm.SetUpParams(oSVm);
+            //SVm.Students = _Studentdata.SaveXML(SVm.Students.to SVm.StartIndex, SVm.EndIndex, SVm.sort, oSVm.sortdir).ToList();
+            return View("ListStudents", SVm);
         }
 
     }

@@ -178,6 +178,7 @@
     <Compile Include="Repositories\StateRepository.cs" />
     <Compile Include="Repositories\StudentRepository.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Utility\utility.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\SampleDB.mdf" />
