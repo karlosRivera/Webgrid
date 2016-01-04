@@ -1,52 +1,102 @@
-﻿    .webgrid-table {
-        font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-        font-size: 1.2em;
-        width: 100%;
-        display: table;
-        border-collapse: separate;
-        border: solid 1px #98BF21;
-        background-color: white;
+﻿/*Webgrid style start*/ 
+
+
+.webgrid-table {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    font-size: 1.2em;
+    width: 100%;
+    display: table;
+    border-collapse: separate;
+    border: solid 1px #98BF21;
+    background-color: white;
+}
+
+    .webgrid-table td, th {
+        border: 1px solid #98BF21;
+        padding: 3px 7px 2px;
     }
 
-        .webgrid-table td, th {
-            border: 1px solid #98BF21;
-            padding: 3px 7px 2px;
-        }
+.webgrid-header {
+    background-color: #7ABA7A;
+    color: #FFFFFF;
+    padding-bottom: 4px;
+    padding-top: 5px;
+    text-align: left;
+    text-decoration: none;
+}
 
-    .webgrid-header {
-        background-color: #A7C942;
-        color: #FFFFFF;
-        padding-bottom: 4px;
-        padding-top: 5px;
-        text-align: left;
+.webgrid-header a {
+    color: #FFFFFF;
+}
+
+
+.webgrid-header a:hover {
+    text-decoration: none;
+    color: #FFFFFF;
+}
+
+    .webgrid-footer
+    {}
+.webgrid-footer td {
+     padding: 0px;
+}
+
+
+
+    .webgrid-footer a:hover {
         text-decoration: none;
     }
 
-        .webgrid-header a:hover {
-            text-decoration: none;
-        }
+.webgrid-row-style {
+    padding: 3px 7px 2px;
+}
 
-    .webgrid-footer {
+.webgrid-alternating-row {
+    background-color: #EAF2D3;
+    padding: 3px 7px 2px;
+}
+
+.notshow {
+    display: none;
+}
+
+.SmallCols {
+    width: 5%;
+}
+
+.NameColWidth {
+    width: 17%;
+}
+
+.ActionCol
+{
+    width: 12%;
+    text-align:center;
+}
+
+/*tr.webgrid-row-style th:nth-child(7) 
+{ 
+    text-align: right !important; 
+}*/
+
+ th:nth-child(7){
+     text-align:center;
+}
+
+.footstuff {
+    background-color: White;
+    color: Red;
+}
+
+    .footstuff a:visited {
+        color: Blue;
     }
 
-        .webgrid-footer a:hover {
-            text-decoration: none;
-        }
-
-    .webgrid-row-style {
-        padding: 3px 7px 2px;
+    .footstuff a {
+        color: Blue;
     }
 
-    .webgrid-alternating-row {
-        background-color: #EAF2D3;
-        padding: 3px 7px 2px;
+    .footstuff td {
+        background-color: White;
+        border-color: White;
     }
-
-    .SmallCols {
-        width: 10%;
-    }
-
-    .NameColWidth {
-        width: 20%;
-    }
-

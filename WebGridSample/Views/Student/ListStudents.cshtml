@@ -1,0 +1,172 @@
+﻿@model  WebGridSample.Models.StudentListViewModel
+@{
+    ViewBag.Title = "Show2";
+}
+<link href="~/Content/WebGridStyle.css" rel="stylesheet" />
+<link href="~/Content/PagerStyle2.css" rel="stylesheet" />
+
+<style type="text/css">
+    .PadOn {
+        padding: 3px 7px 2px;
+    }
+
+    .PadOff {
+        /*padding: 0px !important;*/
+        padding-top: 0px !important;
+        padding-right: 0px !important;
+        padding-bottom: 0px !important;
+        padding-left: 0px !important;
+    }
+
+    .btnGreen{
+        background-color:#5cb85c !important;
+        color:white;
+    }
+
+    .btnSky {
+        background-color: #5bc0de;
+        color:white;
+    }
+
+    .btnRed {
+        background-color: #d9534f;
+        color:white;
+    }
+
+    td input {
+        display: inline;
+        width: 100%;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        border: 1px;
+        border-color: black;
+        border-style: solid;
+    }
+
+    .edit-mode {
+    }
+
+    .edit-user {
+    }
+
+        .edit-user display-mode {
+        }
+
+    .save-user edit-mode {
+    }
+
+    .display-mode {
+    }
+
+    .cancel-user {
+    }
+
+    #bottomdiv{
+        background-color:#373943;
+        height:65px;
+        width:96.5%;
+        margin-left: 20px;
+        display: table;
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    #btnSaveAll
+    {
+        vertical-align: middle;
+        display: block;
+        float:right; 
+        margin-top:15px;
+        margin-right: 14px;
+    }
+</style>
+
+<h2>Grid with partial view & style pager</h2>
+<script>
+    var loaderUrl = '@Url.Content("~/images/loader.gif")';
+</script>
+
+@using (@Html.BeginForm("List", "Stuent", FormMethod.Post, new { @id = "frmDetails" }))
+{
+    @Html.DropDownListFor(x => x.SelectedStateId, new SelectList(Model.States, "ID", "Name"), "-- Select States--")
+    @Html.DropDownListFor(x => x.SelectedCityId, new SelectList(Model.Cities, "ID", "Name"), "-- Select City--")
+    
+    <div id="gridContent" style=" padding:20px; ">
+        @Html.Partial("_StudentGrid")
+    </div>
+    <div id="bottomdiv">
+        <button id="btnSaveAll" class="btn btn-success">Save All</button>
+    </div>
+}
+
+@section scripts{
+<script src="~/Scripts/Personal/GridHandlder2.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $('.edit-mode').hide();
+        $('.edit-user').on('click', function () {
+            var tr = $(this).parents('tr:first');
+            $(tr).addClass('Editing');
+            if ($(tr).find("td:nth-child(2)").hasClass('PadOn'))
+            {
+                $(tr).find("td:nth-child(2)").removeClass("PadOn");
+                $(tr).find("td:nth-child(3)").removeClass("PadOn");
+            }
+
+            $(tr).find("td:nth-child(2)").addClass("PadOff");
+            $(tr).find("td:nth-child(3)").addClass("PadOff");
+            tr.find('.edit-mode, .display-mode').toggle();
+            $(tr).find("input[id*='txtFirstName']").focus();
+            return false;
+        });
+
+        $('.cancel-user').on('click', function () {
+            var tr = $(this).parents('tr:first');
+            $(tr).removeClass('Editing');
+            if ($(tr).find("td:nth-child(2)").hasClass('PadOff')) {
+                $(tr).find("td:nth-child(2)").removeClass("PadOff");
+                $(tr).find("td:nth-child(3)").removeClass("PadOff");
+            }
+
+            $(tr).find("td:nth-child(2)").addClass("PadOn");
+            $(tr).find("td:nth-child(3)").addClass("PadOn");
+            tr.find('.edit-mode, .display-mode').toggle();
+            return false;
+        });
+
+        $('.save-user').on('click', function () {
+            var tr = $(this).parents('tr:first');
+            var ID = tr.find("#HiddenID").val();
+            var FirstName = tr.find("#txtFirstName").val();
+            var LastName = tr.find("#txtLastName").val();
+            tr.find('.edit-mode, .display-mode').toggle();
+            alert('Save data');
+            return false;
+
+            /*
+            var UserID = tr.find("#UserID").html();
+            tr.find("#lblFirstName").text(FirstName);
+            tr.find("#lblLastName").text(LastName);
+            var UserModel =
+            {
+                "ID": UserID,
+                "FirstName": FirstName,
+                "LastName": LastName
+            };
+            $.ajax({
+                url: '/User/UpdateUser/',
+                data: JSON.stringify(UserModel),
+                type: 'POST',
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    alert(data);
+                }
+            });
+            */
+        });
+    })
+</script>
+}
+
+

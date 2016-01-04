@@ -1,0 +1,247 @@
+﻿
+#content {
+    background: #fff none repeat scroll 0 0;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+    display: block;
+    padding: 25px 20px 35px;
+    width: 100%;
+    margin-top:30%;
+    
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 62.5%;
+    line-height: 1;
+
+}
+
+#content ol, ul {
+    list-style: outside none none;
+}
+
+.paginate > li:last-child
+{
+    right:50px;
+    position:absolute
+}
+
+/*.paginate > li:last-child
+{
+    float:right !important;
+    right:50px;
+    
+}*/
+.paginate {
+    display: block;
+    font-size: 1.2em;
+    width: 100%;
+    position:relative;
+}
+
+.paginate.pag1 {
+}
+.paginate.pag1 li {
+    font-weight: bold;
+}
+.paginate.pag1 li a {
+    background: #e9e9e9 none repeat scroll 0 0;
+    border: 1px solid #c0c0c0;
+    border-radius: 3px;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.7) inset, 0 1px 3px rgba(0, 0, 0, 0.1);
+    color: #717171;
+    display: block;
+    float: left;
+    margin-right: 6px;
+    padding: 5px 7px;
+    text-decoration: none;
+    text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.7);
+}
+.paginate.pag1 li a:hover {
+    background: #eee none repeat scroll 0 0;
+    color: #555;
+}
+.paginate.pag1 li a:active {
+    box-shadow: -1px 2px 5px rgba(0, 0, 0, 0.25) inset;
+}
+.paginate.pag1 li.single, .paginate.pag1 li.current {
+    border: 1px solid #c0c0c0;
+    border-radius: 3px;
+    color: #444;
+    display: block;
+    float: left;
+    margin-right: 6px;
+    padding: 5px 7px;
+}
+.paginate.pag2 {
+}
+.paginate.pag2 li {
+    font-weight: bold;
+}
+.paginate.pag2 li a {
+    background-color: #eee;
+    background-image: -moz-linear-gradient(center top , #f7f7f7, #eee);
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    box-shadow: 2px 2px 4px -1px rgba(0, 0, 0, 0.55);
+    color: #585858;
+    display: block;
+    float: left;
+    margin-right: 6px;
+    padding: 6px 11px;
+    text-decoration: none;
+}
+.paginate.pag2 li a:hover {
+    color: #3280dc;
+}
+.paginate.pag2 li a:active {
+    box-shadow: 1px 1px 3px -1px rgba(0, 0, 0, 0.55);
+    position: relative;
+    top: 1px;
+}
+.paginate.pag2 li.single, .paginate.pag2 li.current {
+    border-radius: 3px;
+    color: #676767;
+    display: block;
+    float: left;
+    margin-right: 6px;
+    padding: 8px 11px 6px;
+}
+.paginate.pag3 {
+}
+.paginate.pag3 li {
+    font-weight: bold;
+}
+.paginate.pag3 li a {
+    background: rgba(0, 0, 0, 0) linear-gradient(to bottom, #556270 0%, #444d57 100%) repeat scroll 0 0;
+    border: 1px solid #43505e;
+    border-radius: 3px;
+    box-shadow: 0 3px 0 -2px rgba(255, 255, 255, 0.3) inset;
+    color: #fff;
+    display: block;
+    float: left;
+    margin-right: 6px;
+    padding: 6px 11px;
+    text-decoration: none;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+.paginate.pag3 li a:hover {
+    background: rgba(0, 0, 0, 0) linear-gradient(to bottom, #556270 0%, #5b6774 100%) repeat scroll 0 0;
+}
+.paginate.pag3 li a:active {
+    background: rgba(0, 0, 0, 0) linear-gradient(to bottom, #414952 0%, #555e68 100%) repeat scroll 0 0;
+}
+.paginate.pag3 li.single, .paginate.pag3 li.current {
+    background: #838d98 none repeat scroll 0 0;
+    border: 1px solid #616c78;
+    border-radius: 3px;
+    box-shadow: 0 3px 0 -2px rgba(255, 255, 255, 0.3) inset;
+    color: #fff;
+    display: block;
+    float: left;
+    margin-right: 6px;
+    padding: 6px 11px;
+    text-decoration: none;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+.paginate.pag4 {
+    font-size: 1.4em;
+}
+.paginate.pag4 li {
+    font-weight: bold;
+}
+.paginate.pag4 li a {
+    background: #363842 none repeat scroll 0 0;
+    border-radius: 16px;
+    color: #a2c49e;
+    display: block;
+    float: left;
+    margin-right: 6px;
+    padding: 9px 12px;
+    text-decoration: none;
+    transition: all 0.3s linear 0s;
+}
+.paginate.pag4 li a:hover {
+    color: #fff;
+}
+.paginate.pag4 li a:active {
+    box-shadow: 1px 1px 3px -1px rgba(0, 0, 0, 0.55);
+}
+.paginate.pag4 li.navpage a {
+    background: #607c5d none repeat scroll 0 0;
+    color: #fff;
+    padding: 9px 13px;
+}
+.paginate.pag4 li.navpage a:hover {
+    background: #486f43 none repeat scroll 0 0;
+}
+.paginate.pag4 li.single, .paginate.pag4 li.current {
+    background: #d0dfcf none repeat scroll 0 0;
+    border-radius: 16px;
+    color: #607c5d;
+    display: block;
+    float: left;
+    margin-right: 6px;
+    padding: 9px 12px;
+}
+.paginate.pag5 {
+    background: #373943 none repeat scroll 0 0;
+    border-radius: 3px;
+    font-size: 1.4em;
+    padding: 9px 8px;
+}
+.paginate.pag5 li {
+    font-weight: bold;
+}
+.paginate.pag5 li a {
+    background: #fff none repeat scroll 0 0;
+    border-radius: 16px;
+    color: #5ea25a;
+    display: block;
+    float: left;
+    margin-right: 6px;
+    padding: 9px 12px;
+    text-decoration: none;
+    transition: all 0.3s linear 0s;
+}
+.paginate.pag5 li a:hover {
+    background: #c9dec8 none repeat scroll 0 0;
+    color: #4f664e;
+}
+.paginate.pag5 li a:active {
+    box-shadow: 1px 1px 3px -1px rgba(0, 0, 0, 0.55);
+}
+.paginate.pag5 li.navpage a {
+    background: #c8eac6 none repeat scroll 0 0;
+    color: #4f664e;
+    padding: 9px 13px;
+}
+.paginate.pag5 li.navpage a:hover {
+    background: #a4c6a2 none repeat scroll 0 0;
+    color: #414e40;
+}
+.paginate.pag5 li.current {
+    background: #505362 none repeat scroll 0 0;
+}
+.paginate.pag5 li.single, .paginate.pag5 li.current {
+    border-radius: 16px;
+    color: #fff;
+    display: block;
+    float: left;
+    margin-right: 6px;
+    padding: 9px 12px;
+}
+.clearfix::after {
+    clear: both;
+    content: ".";
+    display: block;
+    height: 0;
+    line-height: 0;
+    visibility: hidden;
+}
+.clearfix {
+    display: inline-block;
+}
+html[xmlns] .clearfix {
+    display: block;
+}
+* html .clearfix {
+    height: 1%;
+}

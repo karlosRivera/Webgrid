@@ -1,0 +1,22 @@
+﻿@model  WebGridSample.Models.StudentVm
+@{
+    ViewBag.Title = "Show2";
+}
+<link href="~/Content/WebGridStyle.css" rel="stylesheet" />
+<link href="~/Content/PagerStyle2.css" rel="stylesheet" />
+
+<h2>Grid with partial view & styled pager</h2>
+<script>
+    var loaderUrl = '@Url.Content("~/images/loader.gif")';
+</script>
+
+@using (@Html.BeginForm("Show3", "WebGrid_Sample3", FormMethod.Post, new { @id = "frmDetails" }))
+{
+    <div id="gridContent" style=" padding:20px; ">
+        @Html.Partial("_GridSample2")
+    </div>
+}
+@section scripts{
+
+    <script src="~/Scripts/Personal/GridHandlder2.js"></script>
+}

@@ -1,0 +1,58 @@
+﻿@model  WebGridSample.Models.StudentListViewModel
+
+@{
+    WebGrid grid = new WebGrid(null, rowsPerPage: Model.PageSize, canPage: true,
+        defaultSort: Model.sort, ajaxUpdateContainerId: "gridContent", ajaxUpdateCallback: "initScripts");
+    grid.Bind(Model.Students, autoSortAndPage: false, rowCount: Model.RowCount);
+}
+
+
+@grid.GetHtml(
+        tableStyle: "webgrid-table",
+        headerStyle: "webgrid-header",
+        footerStyle: "webgrid-footer",
+        alternatingRowStyle: "webgrid-alternating-row",
+        selectedRowStyle: "webgrid-selected-row",
+        rowStyle: "webgrid-row-style",
+        mode: WebGridPagerModes.All,
+        firstText: "<<",
+        previousText: "<",
+        nextText: ">",
+        lastText: ">>",
+        numericLinksCount: 5,
+        columns:
+            grid.Columns
+            (
+            grid.Column(columnName: "ID", header: "ID", format: @<text>@item.ID <input type="hidden" name="HiddenID" value="@item.ID" id="HiddenID"  /></text>,style:"SmallCols"),
+            grid.Column(columnName: "FirstName", header: "First Name", format: @<text><span class="display-mode">@item.FirstName</span><input type="text" id="txtFirstName" value="@item.FirstName" class="edit-mode" /></text>,style:"NameColWidth" ),
+            grid.Column(columnName: "LastName", header: "Last Name", format: @<text><span class="display-mode">@item.LastName</span><input type="text" id="txtLastName" value="@item.LastName" class="edit-mode" /></text>,style:"NameColWidth"),
+
+            grid.Column(columnName: "StateName", header: "State Name", format: @<text>@item.StateName</text>,style:"NameColWidth"),
+            grid.Column(columnName: "CityName", header: "City Name", format: @<text>@item.CityName</text>,style:"NameColWidth"),
+            grid.Column(header: "IsActive",
+            format: @<text><input id="select" class="box" name="select"
+                                  type="checkbox" @(item.IsActive ? "checked='checked'" : "") value="@item.IsActive" /></text>
+                    , style: "text-center checkbox-width SmallCols"),
+
+             grid.Column("Action", format: @<text>
+                        <button class="edit-user display-mode btnGreen">Edit</button>
+                        <button class="edit-user display-mode btnRed">Delete</button>
+                        <button class="save-user edit-mode btnGreen">Save</button>
+                        <button class="cancel-user edit-mode btnSky">Cancel</button>
+            </text>, style: "ActionCol", canSort: false)
+
+                        ))
+
+
+
+@Html.Hidden("dir", grid.SortDirection)
+@Html.Hidden("col", grid.SortColumn)
+@Html.Hidden("page", Model.CurrentPage)
+
+@Html.Hidden("firstRecord", (grid.PageIndex * grid.RowsPerPage) + 1)
+@Html.Hidden("lastRecord", (grid.PageIndex * grid.RowsPerPage) + grid.Rows.Count())
+@Html.Hidden("TotalRows", grid.TotalRowCount)
+@*@Html.Hidden("loaderUrl",@Url.Content("~/images/loader.gif"))*@
+
+
+

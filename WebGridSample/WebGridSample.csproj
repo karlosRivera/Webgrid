@@ -159,13 +159,24 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\DefaultController.cs" />
+    <Compile Include="Controllers\SamplePagerController.cs" />
+    <Compile Include="Controllers\StuentController.cs" />
+    <Compile Include="Controllers\TableController.cs" />
     <Compile Include="Controllers\WebGrid_Sample1Controller.cs" />
     <Compile Include="Controllers\WebGrid_Sample2Controller.cs" />
+    <Compile Include="Controllers\WebGrid_Sample3Controller.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\City.cs" />
+    <Compile Include="Models\State.cs" />
     <Compile Include="Models\Student.cs" />
+    <Compile Include="Models\StudentListViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\AdoRepository.cs" />
+    <Compile Include="Repositories\CityRepository.cs" />
+    <Compile Include="Repositories\StateRepository.cs" />
+    <Compile Include="Repositories\StudentRepository.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -175,6 +186,8 @@
     </Content>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\PagerStyle.css" />
+    <Content Include="Content\PagerStyle2.css" />
     <Content Include="Content\WebGridStyle.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -182,6 +195,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="images\back.png" />
     <Content Include="images\first.png" />
+    <Content Include="images\loader.gif" />
     <Content Include="images\next.png" />
     <Content Include="images\last.png" />
     <Content Include="Scripts\bootstrap.js" />
@@ -196,6 +210,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\Personal\GridHandlder1.js" />
+    <Content Include="Scripts\Personal\GridHandlder2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
@@ -218,6 +233,12 @@
     <Content Include="Views\WebGrid_Sample2\Show2.cshtml" />
     <Content Include="Views\Shared\_GridSample1.cshtml" />
     <Content Include="Views\Default\Index.cshtml" />
+    <Content Include="Views\SamplePager\Index.cshtml" />
+    <Content Include="Views\Shared\_GridSample2.cshtml" />
+    <Content Include="Views\Shared\_StudentGrid.cshtml" />
+    <Content Include="Views\Student\ListStudents.cshtml" />
+    <Content Include="Views\Table\Index.cshtml" />
+    <Content Include="Views\WebGrid_Sample3\Show3.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

@@ -1,0 +1,115 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+<link href="~/Content/WebGridStyle.css" rel="stylesheet" />
+<link href="~/Content/PagerStyle2.css" rel="stylesheet" />
+
+<h2>Index</h2>
+
+<table data-swhgcallback="initScripts" data-swhgcontainer="gridContent" data-swhgajax="true" class="webgrid-table">
+    <thead>
+        <tr class="webgrid-header">
+            <th scope="col">
+                <a href="http://localhost:13562/WebGrid_Sample2/Show2?sort=ID&amp;sortdir=DESC&amp;page=1" data-swhglnk="true">ID ▲</a>
+            </th>
+            <th scope="col">
+                <a href="http://localhost:13562/WebGrid_Sample2/Show2?sort=FirstName&amp;sortdir=ASC&amp;page=1" data-swhglnk="true">First Name</a>
+            </th>
+            <th scope="col">
+                <a href="http://localhost:13562/WebGrid_Sample2/Show2?sort=LastName&amp;sortdir=ASC&amp;page=1" data-swhglnk="true">Last Name</a>
+            </th>
+            <th scope="col">
+                <a href="http://localhost:13562/WebGrid_Sample2/Show2?sort=StateName&amp;sortdir=ASC&amp;page=1" data-swhglnk="true">State Name</a>
+            </th>
+            <th scope="col">
+                <a href="http://localhost:13562/WebGrid_Sample2/Show2?sort=CityName&amp;sortdir=ASC&amp;page=1" data-swhglnk="true">City Name</a>
+            </th>
+            <th scope="col">
+                IsActive
+            </th>
+        </tr>
+    </thead>
+    <tfoot>
+        <tr class="webgrid-footer">
+            <td colspan="6" >
+                <div id="content">
+                    
+                    <div id='pager'>
+                        <ul class="paginate pag5 clearfix">
+                            <li class="single">Page 5 of 5 of 50</li>
+                            <li class="navpage"><a href="http://localhost:13562/SamplePager/Index">prev</a></li>
+                            <li class="navpage"><a href="http://localhost:13562/SamplePager/Index">next</a></li>
+                            <li><a href="http://localhost:13562/SamplePager/Index">1</a></li>
+                            <li><a href="http://localhost:13562/SamplePager/Index">2</a></li>
+                            <li><a href="http://localhost:13562/SamplePager/Index">3</a></li>
+                            <li><a href="http://localhost:13562/SamplePager/Index">4</a></li>
+                            <li><a href="http://localhost:13562/SamplePager/Index">5</a></li>
+                            <li class="current">6</li>
+                            <li class="navpage"><a href="">next</a></li>
+                            <li class="navpage"><a href="">last</a></li>
+                            <li class="single"><div id="loader">Loading....</div></li>
+                        </ul>
+                    </div>
+
+                    
+                </div>
+            </td>
+        </tr>
+    </tfoot>
+    <tbody>
+        <tr class="webgrid-row-style">
+            <td class="SmallCols">1</td>
+            <td class="NameColWidth">Amit</td>
+            <td class="NameColWidth">Ghosh</td>
+            <td class="NameColWidth">West Bengal</td>
+            <td class="NameColWidth">Kolkata</td>
+            <td class="text-center checkbox-width SmallCols">
+                <input type="checkbox" value="True" checked="'checked'" name="select" class="box" id="select">
+            </td>
+        </tr>
+        <tr class="webgrid-alternating-row">
+            <td class="SmallCols">2</td>
+            <td class="NameColWidth">Tridip</td>
+            <td class="NameColWidth">Bhattacharjee</td>
+            <td class="NameColWidth">Bihar</td>
+            <td class="NameColWidth">DharBganga</td>
+            <td class="text-center checkbox-width SmallCols">
+                <input type="checkbox" value="True" checked="'checked'" name="select" class="box" id="select">
+            </td>
+        </tr>
+        <tr class="webgrid-row-style">
+            <td class="SmallCols">3</td>
+            <td class="NameColWidth">Dipyendu</td>
+            <td class="NameColWidth">Majumdar</td>
+            <td class="NameColWidth">Orissa</td>
+            <td class="NameColWidth">Puri</td>
+            <td class="text-center checkbox-width SmallCols">
+                <input type="checkbox" value="False" name="select" class="box" id="select">
+            </td>
+        </tr>
+        <tr class="webgrid-alternating-row">
+            <td class="SmallCols">4</td>
+            <td class="NameColWidth">Arijit</td>
+            <td class="NameColWidth">Banerjee</td>
+            <td class="NameColWidth">West Bengal</td>
+            <td class="NameColWidth">Barrack Pore</td>
+            <td class="text-center checkbox-width SmallCols">
+                <input type="checkbox" value="False" name="select" class="box" id="select">
+            </td>
+        </tr>
+        <tr class="webgrid-row-style">
+            <td class="SmallCols">5</td>
+            <td class="NameColWidth">Madhabi</td>
+            <td class="NameColWidth">Sinha</td>
+            <td class="NameColWidth">West Bengal</td>
+            <td class="NameColWidth">Ranaghat</td>
+            <td class="text-center checkbox-width SmallCols">
+                <input type="checkbox" value="True" checked="'checked'" name="select" class="box" id="select">
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+
+

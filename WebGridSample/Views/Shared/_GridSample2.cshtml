@@ -2,7 +2,7 @@
 
 @{
     WebGrid grid = new WebGrid(null, rowsPerPage: Model.PageSize, canPage: true,
-        defaultSort: Model.sort, ajaxUpdateContainerId: "gridContent", ajaxUpdateCallback: "initScripts"); //, ajaxUpdateContainerId: "gridContent"
+        defaultSort: Model.sort, ajaxUpdateContainerId: "gridContent", ajaxUpdateCallback: "initScripts");
     grid.Bind(Model.Students, autoSortAndPage: false, rowCount: Model.RowCount);
 }
 
@@ -30,14 +30,19 @@
             grid.Column(columnName: "StateName", header: "State Name", format: @<text>@item.StateName</text>,style:"NameColWidth"),
             grid.Column(columnName: "CityName", header: "City Name", format: @<text>@item.CityName</text>,style:"NameColWidth"),
             grid.Column(header: "IsActive",
-            format: @<text><input id="select" class="box" name="select" 
-            type="checkbox" @(item.IsActive ? "checked='checked'" : "") value="@item.IsActive" /></text>
-            , style: "text-center checkbox-width SmallCols")
-            ))
-                                                          
+            format: @<text><input id="select" class="box" name="select"
+                                  type="checkbox" @(item.IsActive ? "checked='checked'" : "") value="@item.IsActive" /></text>
+                , style: "text-center checkbox-width SmallCols")
+                ))
+
 
 
 @Html.Hidden("dir", grid.SortDirection)
 @Html.Hidden("col", grid.SortColumn)
 @Html.Hidden("page", Model.CurrentPage)
+
+@Html.Hidden("firstRecord", (grid.PageIndex * grid.RowsPerPage) + 1)
+@Html.Hidden("lastRecord", (grid.PageIndex * grid.RowsPerPage) + grid.Rows.Count())
+@Html.Hidden("TotalRows", grid.TotalRowCount)
+@*@Html.Hidden("loaderUrl",@Url.Content("~/images/loader.gif"))*@
 
