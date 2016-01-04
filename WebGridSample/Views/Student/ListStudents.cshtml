@@ -33,7 +33,7 @@
         color:white;
     }
 
-    td input {
+    td input , td select {
         display: inline;
         width: 100%;
         box-sizing: border-box;
@@ -89,9 +89,6 @@
 
 @using (@Html.BeginForm("List", "Stuent", FormMethod.Post, new { @id = "frmDetails" }))
 {
-    @Html.DropDownListFor(x => x.SelectedStateId, new SelectList(Model.States, "ID", "Name"), "-- Select States--")
-    @Html.DropDownListFor(x => x.SelectedCityId, new SelectList(Model.Cities, "ID", "Name"), "-- Select City--")
-    
     <div id="gridContent" style=" padding:20px; ">
         @Html.Partial("_StudentGrid")
     </div>
@@ -112,10 +109,21 @@
             {
                 $(tr).find("td:nth-child(2)").removeClass("PadOn");
                 $(tr).find("td:nth-child(3)").removeClass("PadOn");
+                $(tr).find("td:nth-child(4)").removeClass("PadOn");
+                $(tr).find("td:nth-child(5)").removeClass("PadOn");
+
             }
 
             $(tr).find("td:nth-child(2)").addClass("PadOff");
             $(tr).find("td:nth-child(3)").addClass("PadOff");
+            $(tr).find("td:nth-child(4)").addClass("PadOff");
+            $(tr).find("td:nth-child(5)").addClass("PadOff");
+
+            var stateid = $(tr).find("input[id*='HiddenStateID']").val();
+            var cityid = $(tr).find("input[id*='HiddenCityID']").val();
+            $(tr).find("select[id*='cboState']").val(stateid);
+            $(tr).find("select[id*='cboCity']").val(cityid);
+
             tr.find('.edit-mode, .display-mode').toggle();
             $(tr).find("input[id*='txtFirstName']").focus();
             return false;
@@ -127,10 +135,16 @@
             if ($(tr).find("td:nth-child(2)").hasClass('PadOff')) {
                 $(tr).find("td:nth-child(2)").removeClass("PadOff");
                 $(tr).find("td:nth-child(3)").removeClass("PadOff");
+                $(tr).find("td:nth-child(4)").removeClass("PadOff");
+                $(tr).find("td:nth-child(5)").removeClass("PadOff");
+
             }
 
             $(tr).find("td:nth-child(2)").addClass("PadOn");
             $(tr).find("td:nth-child(3)").addClass("PadOn");
+            $(tr).find("td:nth-child(4)").addClass("PadOn");
+            $(tr).find("td:nth-child(5)").addClass("PadOn");
+
             tr.find('.edit-mode, .display-mode').toggle();
             return false;
         });
