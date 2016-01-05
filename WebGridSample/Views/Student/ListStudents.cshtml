@@ -151,10 +151,46 @@
 
         $('.save-user').on('click', function () {
             var tr = $(this).parents('tr:first');
-            var ID = tr.find("#HiddenID").val();
-            var FirstName = tr.find("#txtFirstName").val();
-            var LastName = tr.find("#txtLastName").val();
+
+            var dir = $("#dir").val();
+            var col = $("#col").val();
+            var page = $("#page").val();
+
+            var ID = tr.find("input[id*='HiddenID']").val();
+            var FirstName = tr.find("input[id*='txtFirstName']").val();
+            var LastName = tr.find("input[id*='txtLastName']").val();
+            var StateID = tr.find("select[id*='cboState'] :selected").val();
+            var CityID = tr.find("select[id*='cboCity'] :selected").val();
+            var IsActive = $("[class*='box']").is(':checked');
+            
+            alert('id ' + ID);
+            alert('FirstName ' + FirstName);
+            alert('LastName ' + LastName);
+            alert('StateID ' + StateID);
+            alert('CityID ' + CityID);
+            alert('IsActive ' + IsActive);
+            alert('dir ' + dir);
+            alert('col ' + col);
+            alert('page ' + page);
+
+            var data = new Object();
+            var StudentArray = [];
+            StudentArray.push(PopulateStudent(ID, FirstName, LastName, StateID, CityID, "YY"));
+
             tr.find('.edit-mode, .display-mode').toggle();
+            if ($(tr).find("td:nth-child(2)").hasClass('PadOff')) {
+                $(tr).find("td:nth-child(2)").removeClass("PadOff");
+                $(tr).find("td:nth-child(3)").removeClass("PadOff");
+                $(tr).find("td:nth-child(4)").removeClass("PadOff");
+                $(tr).find("td:nth-child(5)").removeClass("PadOff");
+
+            }
+
+            $(tr).find("td:nth-child(2)").addClass("PadOn");
+            $(tr).find("td:nth-child(3)").addClass("PadOn");
+            $(tr).find("td:nth-child(4)").addClass("PadOn");
+            $(tr).find("td:nth-child(5)").addClass("PadOn");
+
             alert('Save data');
             return false;
 
@@ -179,6 +215,17 @@
             });
             */
         });
+
+        function PopulateStudent(id, firstname, lastname, stateid, cityid, isactive) {
+            var Student = new Object();
+            Student.ID = id;
+            Student.FirstName = firstname;
+            Student.LastName = lastname;
+            Student.IsActive = isactive;
+            Student.StateID = stateid;
+            Student.CityID = cityid;
+            return Student;
+        }
     })
 </script>
 }
