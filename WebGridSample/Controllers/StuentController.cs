@@ -36,6 +36,7 @@ namespace WebGridSample.Controllers
             return View("ListStudents",SVm);
         }
 
+        [HttpPost]
         public ActionResult UpdateStudents(StudentListViewModel oSVm)
         {
             System.Threading.Thread.Sleep(1000); // just simulate delay of one second

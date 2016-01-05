@@ -152,8 +152,8 @@
         $('.save-user').on('click', function () {
             var tr = $(this).parents('tr:first');
 
-            var dir = $("#dir").val();
-            var col = $("#col").val();
+            var Sortdir = $("#dir").val();
+            var Sortcol = $("#col").val();
             var page = $("#page").val();
 
             var ID = tr.find("input[id*='HiddenID']").val();
@@ -162,20 +162,15 @@
             var StateID = tr.find("select[id*='cboState'] :selected").val();
             var CityID = tr.find("select[id*='cboCity'] :selected").val();
             var IsActive = $("[class*='box']").is(':checked');
-            
-            alert('id ' + ID);
-            alert('FirstName ' + FirstName);
-            alert('LastName ' + LastName);
-            alert('StateID ' + StateID);
-            alert('CityID ' + CityID);
-            alert('IsActive ' + IsActive);
-            alert('dir ' + dir);
-            alert('col ' + col);
-            alert('page ' + page);
 
             var data = new Object();
             var StudentArray = [];
-            StudentArray.push(PopulateStudent(ID, FirstName, LastName, StateID, CityID, "YY"));
+            StudentArray.push(PopulateStudent(ID, FirstName, LastName, StateID, CityID, IsActive));
+
+            data.page = page;
+            data.sort = Sortcol;
+            data.sortdir = Sortdir;
+            data.Students = StudentArray;
 
             tr.find('.edit-mode, .display-mode').toggle();
             if ($(tr).find("td:nth-child(2)").hasClass('PadOff')) {
@@ -191,29 +186,21 @@
             $(tr).find("td:nth-child(4)").addClass("PadOn");
             $(tr).find("td:nth-child(5)").addClass("PadOn");
 
-            alert('Save data');
-            return false;
+            alert(JSON.stringify({ StudentListViewModel: data }));
 
-            /*
-            var UserID = tr.find("#UserID").html();
-            tr.find("#lblFirstName").text(FirstName);
-            tr.find("#lblLastName").text(LastName);
-            var UserModel =
-            {
-                "ID": UserID,
-                "FirstName": FirstName,
-                "LastName": LastName
-            };
             $.ajax({
-                url: '/User/UpdateUser/',
-                data: JSON.stringify(UserModel),
+                url:  '@Url.Action("UpdateStudents", "Student")',
+                data: JSON.stringify({ StudentListViewModel: data }),
                 type: 'POST',
                 contentType: 'application/json; charset=utf-8',
                 success: function (data) {
                     alert(data);
                 }
             });
-            */
+
+            
+            return false;
+
         });
 
         function PopulateStudent(id, firstname, lastname, stateid, cityid, isactive) {
