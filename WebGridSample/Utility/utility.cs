@@ -10,28 +10,19 @@ using System.Xml.Linq;
 
 namespace WebGridSample.Utility
 {
-    public static class Utility
+    public static class utility
     {
-        public static string GetXML(IList<Student> studentlist)
+        public static string ToXml<T>(this T obj, string rootName)
         {
-            try
-            {
-                var xEle = new XElement("Employees",
-                            from student in studentlist
-                            select new XElement("Employee",
-                                         new XAttribute("ID", emp.ID),
-                                           new XElement("FName", emp.FName),
-                                           new XElement("LName", emp.LName),
-                                           new XElement("DOB", emp.DOB),
-                                           new XElement("Sex", emp.Sex)
-                                       ));
+            XmlSerializer serializer = new XmlSerializer(typeof(T), new XmlRootAttribute(rootName));
 
-                xEle.Save("D:\\employees.xml");
-                Console.WriteLine("Converted to XML");
-            }
-            catch (Exception ex)
+            var xmlNs = new XmlSerializerNamespaces();
+            xmlNs.Add(string.Empty, string.Empty);
+
+            using (StringWriter sw = new StringWriter())
             {
-                Console.WriteLine(ex.Message);
+                serializer.Serialize(sw, obj, xmlNs);
+                return sw.ToString();
             }
         }
     }
