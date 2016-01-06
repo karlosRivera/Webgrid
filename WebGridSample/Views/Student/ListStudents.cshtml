@@ -119,6 +119,7 @@
             $(tr).find("td:nth-child(4)").addClass("PadOff");
             $(tr).find("td:nth-child(5)").addClass("PadOff");
 
+            // fetching dropdown selected value
             //var stateid = $(tr).find("input[id*='HiddenStateID']").val();
             //var cityid = $(tr).find("input[id*='HiddenCityID']").val();
             //$(tr).find("select[id*='cboState']").val(stateid);
@@ -185,8 +186,6 @@
             $(tr).find("td:nth-child(3)").addClass("PadOn");
             $(tr).find("td:nth-child(4)").addClass("PadOn");
             $(tr).find("td:nth-child(5)").addClass("PadOn");
-
-            alert(JSON.stringify({ StudentListViewModel: data }));
 
             $.ajax({
                 url:  '@Url.Action("UpdateStudents", "Student")',
