@@ -119,10 +119,10 @@
             $(tr).find("td:nth-child(4)").addClass("PadOff");
             $(tr).find("td:nth-child(5)").addClass("PadOff");
 
-            var stateid = $(tr).find("input[id*='HiddenStateID']").val();
-            var cityid = $(tr).find("input[id*='HiddenCityID']").val();
-            $(tr).find("select[id*='cboState']").val(stateid);
-            $(tr).find("select[id*='cboCity']").val(cityid);
+            //var stateid = $(tr).find("input[id*='HiddenStateID']").val();
+            //var cityid = $(tr).find("input[id*='HiddenCityID']").val();
+            //$(tr).find("select[id*='cboState']").val(stateid);
+            //$(tr).find("select[id*='cboCity']").val(cityid);
 
             tr.find('.edit-mode, .display-mode').toggle();
             $(tr).find("input[id*='txtFirstName']").focus();
@@ -190,7 +190,7 @@
 
             $.ajax({
                 url:  '@Url.Action("UpdateStudents", "Student")',
-                data: JSON.stringify({ StudentListViewModel: data }),
+                data: JSON.stringify({ oSVm: data }),
                 type: 'POST',
                 contentType: 'application/json; charset=utf-8',
                 success: function (data) {
