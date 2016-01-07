@@ -1,6 +1,5 @@
 CREATE PROCEDURE [dbo].USP_UpdateStudent
-	@param1 int = 0,
-	@param2 int
+
 AS
 
 Declare @Data xml  
