@@ -98,7 +98,7 @@ namespace DataLayer.Repository
             return record;
         }
 
-        protected IEnumerable<T> ExecuteStoredProc(SqlCommand command)
+        protected IEnumerable<T> ExecuteStoredProc(SqlCommand command, string CountColName="TotalCount")
         {
             var reader = (SqlDataReader)null;
             var list = new List<T>();
@@ -114,6 +114,16 @@ namespace DataLayer.Repository
                     var record = PopulateRecord(reader);
                     if (record != null) list.Add(record);
                 }
+
+                reader.NextResult();
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        GetDataCount(Convert.ToInt32(reader[CountColName].ToString()));
+                    }
+                }
+
             }
             finally
             {

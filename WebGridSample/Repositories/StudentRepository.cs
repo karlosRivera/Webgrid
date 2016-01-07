@@ -37,27 +37,37 @@ namespace DataLayer.Repository
             }
         }
 
-        public IEnumerable<Student> SaveXML(string strXML,int startindex,int endindex,string sortcol,string sortorder)
+        public IEnumerable<Student> SaveXML(int pageno,int @PageSize,string sortcol,string sortorder)
         {
             // PARAMETERIZED QUERIES!
-            using (var command = new SqlCommand("upsUpdateData"))
+            using (var command = new SqlCommand("USP_GetStudentData"))
             {
-                command.Parameters.Add(new ObjectParameter("strXML", strXML));
-                command.Parameters.Add(new ObjectParameter("startindex", startindex));
-                command.Parameters.Add(new ObjectParameter("endindex", endindex));
-                command.Parameters.Add(new ObjectParameter("sortcol", sortcol));
-                command.Parameters.Add(new ObjectParameter("sortorder", sortorder));
+                command.Parameters.Add(new ObjectParameter("@PageNbr", pageno));
+                command.Parameters.Add(new ObjectParameter("@PageNbr", PageSize));
+                command.Parameters.Add(new ObjectParameter("@SortColumn", sortcol));
+                command.Parameters.Add(new ObjectParameter("@SortOrder", sortorder));
                 return ExecuteStoredProc(command);
             }
         }
 
-        public IEnumerable<Student> GetStudents(int StartIndex, int EndIndex, string sortCol, string sortOrder)
+        public IEnumerable<Student> GetStudents(int pageno, int @PageSize, string sortcol, string sortorder)
         {
-            string strSQL = "SELECT * FROM vwListStudents WHERE ID >=" + StartIndex + " AND ID <=" + EndIndex;
-            strSQL += " ORDER BY " + sortCol + " " + sortOrder;
-            strSQL += ";SELECT COUNT(*) AS Count FROM vwListStudents";
-            var command = new SqlCommand(strSQL);
-            return GetRecords(command);
+            //string strSQL = "SELECT * FROM vwListStudents WHERE ID >=" + StartIndex + " AND ID <=" + EndIndex;
+            //strSQL += " ORDER BY " + sortCol + " " + sortOrder;
+            //strSQL += ";SELECT COUNT(*) AS Count FROM vwListStudents";
+            //var command = new SqlCommand(strSQL);
+            //return GetRecords(command);
+            if (pageno <= 0) pageno = 1;
+
+            using (var command = new SqlCommand("USP_GetStudentData"))
+            {
+                command.Parameters.Add("@PageNbr", SqlDbType.Int).Value = pageno;
+                command.Parameters.Add("@PageSize",SqlDbType.Int).Value=  PageSize;
+                command.Parameters.Add("@SortColumn", SqlDbType.VarChar,20).Value = sortcol;
+                command.Parameters.Add("@SortOrder", SqlDbType.VarChar, 4).Value = sortorder;
+                return ExecuteStoredProc(command);
+            }
+
         }
 
         public override Student PopulateRecord(SqlDataReader reader)

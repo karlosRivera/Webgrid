@@ -29,8 +29,8 @@ namespace WebGridSample.Controllers
                 System.Threading.Thread.Sleep(1000); // just simulate delay of one second
 
             StudentListViewModel SVm = new StudentListViewModel();
+            SVm.Students = _Studentdata.GetStudents(oSVm.page, oSVm.PageSize, SVm.sort, oSVm.sortdir).ToList();
             SVm.SetUpParams(oSVm);
-            SVm.Students = _Studentdata.GetStudents(SVm.StartIndex, SVm.EndIndex, SVm.sort, oSVm.sortdir).ToList();
             SVm.States = _Statedata.GetAll().ToList();
             SVm.Cities = _Citydata.GetAll().ToList();
             SVm.RowCount = _Studentdata.DataCounter;
@@ -43,7 +43,7 @@ namespace WebGridSample.Controllers
             //System.Threading.Thread.Sleep(1000); // just simulate delay of one second
             StudentListViewModel SVm = new StudentListViewModel();
             SVm.SetUpParams(oSVm);
-            SVm.Students = _Studentdata.SaveXML(new List<Student>(oSVm.Students).ToXml("Students"), SVm.StartIndex, SVm.EndIndex, SVm.sort, SVm.sortdir).ToList();
+            //SVm.Students = _Studentdata.SaveXML(new List<Student>(oSVm.Students).ToXml("Students"), SVm.StartIndex, SVm.EndIndex, SVm.sort, SVm.sortdir).ToList();
 
             
 
