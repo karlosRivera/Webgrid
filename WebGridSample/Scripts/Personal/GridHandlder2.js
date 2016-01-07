@@ -46,6 +46,7 @@ $(document).ready(function () {
 });
 
 function initScripts() {
+    $('.edit-mode').hide();
     SetSortArrows();
     //SetPagerNavImage();
     PagerUI();
@@ -135,4 +136,117 @@ $(document).ajaxStart(function () {
 
 $(document).ajaxComplete(function () {
     $('#loader').hide();
+})
+
+$(function () {
+    $(document).on('click', '.edit-user', function () {
+        var tr = $(this).parents('tr:first');
+        $(tr).addClass('Editing');
+        if ($(tr).find("td:nth-child(2)").hasClass('PadOn')) {
+            $(tr).find("td:nth-child(2)").removeClass("PadOn");
+            $(tr).find("td:nth-child(3)").removeClass("PadOn");
+            $(tr).find("td:nth-child(4)").removeClass("PadOn");
+            $(tr).find("td:nth-child(5)").removeClass("PadOn");
+
+        }
+
+        $(tr).find("td:nth-child(2)").addClass("PadOff");
+        $(tr).find("td:nth-child(3)").addClass("PadOff");
+        $(tr).find("td:nth-child(4)").addClass("PadOff");
+        $(tr).find("td:nth-child(5)").addClass("PadOff");
+
+        // fetching dropdown selected value
+        //var stateid = $(tr).find("input[id*='HiddenStateID']").val();
+        //var cityid = $(tr).find("input[id*='HiddenCityID']").val();
+        //$(tr).find("select[id*='cboState']").val(stateid);
+        //$(tr).find("select[id*='cboCity']").val(cityid);
+
+        tr.find('.edit-mode, .display-mode').toggle();
+        $(tr).find("input[id*='txtFirstName']").focus();
+        return false;
+    });
+
+    $(document).on('click', '.cancel-user', function () {
+        var tr = $(this).parents('tr:first');
+        $(tr).removeClass('Editing');
+        if ($(tr).find("td:nth-child(2)").hasClass('PadOff')) {
+            $(tr).find("td:nth-child(2)").removeClass("PadOff");
+            $(tr).find("td:nth-child(3)").removeClass("PadOff");
+            $(tr).find("td:nth-child(4)").removeClass("PadOff");
+            $(tr).find("td:nth-child(5)").removeClass("PadOff");
+
+        }
+
+        $(tr).find("td:nth-child(2)").addClass("PadOn");
+        $(tr).find("td:nth-child(3)").addClass("PadOn");
+        $(tr).find("td:nth-child(4)").addClass("PadOn");
+        $(tr).find("td:nth-child(5)").addClass("PadOn");
+
+        tr.find('.edit-mode, .display-mode').toggle();
+        return false;
+    });
+
+    $(document).on('click', '.save-user', function () {
+
+        var tr = $(this).parents('tr:first');
+
+        var Sortdir = $("#dir").val();
+        var Sortcol = $("#col").val();
+        var page = $("#page").val();
+
+        var ID = tr.find("input[id*='HiddenID']").val();
+        var FirstName = tr.find("input[id*='txtFirstName']").val();
+        var LastName = tr.find("input[id*='txtLastName']").val();
+        var StateID = tr.find("select[id*='cboState'] :selected").val();
+        var CityID = tr.find("select[id*='cboCity'] :selected").val();
+        var IsActive = $("[class*='box']").is(':checked');
+
+        var data = new Object();
+        var StudentArray = [];
+        StudentArray.push(PopulateStudent(ID, FirstName, LastName, StateID, CityID, IsActive));
+
+        data.page = page;
+        data.sort = Sortcol;
+        data.sortdir = Sortdir;
+        data.Students = StudentArray;
+
+        tr.find('.edit-mode, .display-mode').toggle();
+        if ($(tr).find("td:nth-child(2)").hasClass('PadOff')) {
+            $(tr).find("td:nth-child(2)").removeClass("PadOff");
+            $(tr).find("td:nth-child(3)").removeClass("PadOff");
+            $(tr).find("td:nth-child(4)").removeClass("PadOff");
+            $(tr).find("td:nth-child(5)").removeClass("PadOff");
+
+        }
+
+        $(tr).find("td:nth-child(2)").addClass("PadOn");
+        $(tr).find("td:nth-child(3)").addClass("PadOn");
+        $(tr).find("td:nth-child(4)").addClass("PadOn");
+        $(tr).find("td:nth-child(5)").addClass("PadOn");
+
+        $.ajax({
+            url: '@Url.Action("UpdateStudents", "Student")',
+            data: JSON.stringify({ oSVm: data }),
+            type: 'POST',
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                alert(data);
+            }
+        });
+
+
+        return false;
+
+    });
+
+    function PopulateStudent(id, firstname, lastname, stateid, cityid, isactive) {
+        var Student = new Object();
+        Student.ID = id;
+        Student.FirstName = firstname;
+        Student.LastName = lastname;
+        Student.IsActive = isactive;
+        Student.StateID = stateid;
+        Student.CityID = cityid;
+        return Student;
+    }
 })
