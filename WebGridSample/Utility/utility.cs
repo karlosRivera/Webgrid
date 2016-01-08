@@ -7,6 +7,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using System.IO;
 using System.Xml.Linq;
+using System.Text;
 
 namespace WebGridSample.Utility
 {
@@ -26,4 +27,9 @@ namespace WebGridSample.Utility
             }
         }
     }
+
+//    public class Utf8StringWriter : StringWriter
+//{
+//        public override Encoding Encoding => Encoding.UTF8;
+//    }
 }
