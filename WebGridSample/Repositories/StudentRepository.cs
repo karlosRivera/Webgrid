@@ -37,37 +37,39 @@ namespace DataLayer.Repository
             }
         }
 
-        public IEnumerable<Student> SaveXML(int pageno,int @PageSize,string sortcol,string sortorder)
+        public IEnumerable<Student> SaveXML(string strXML, int PageNo,int PageSize,string SortCol,string SortOrder)
         {
-            // PARAMETERIZED QUERIES!
-            using (var command = new SqlCommand("USP_GetStudentData"))
+            if (PageNo <= 0) PageNo = 1;
+
+            using (var command = new SqlCommand("USP_SaveStudent"))
             {
-                command.Parameters.Add(new ObjectParameter("@PageNbr", pageno));
-                command.Parameters.Add(new ObjectParameter("@PageNbr", PageSize));
-                command.Parameters.Add(new ObjectParameter("@SortColumn", sortcol));
-                command.Parameters.Add(new ObjectParameter("@SortOrder", sortorder));
+                command.Parameters.Add("@Data", SqlDbType.Xml).Value = strXML;
+                command.Parameters.Add("@PageNbr", SqlDbType.Int).Value = PageNo;
+                command.Parameters.Add("@PageSize", SqlDbType.Int).Value = PageSize;
+                command.Parameters.Add("@SortColumn", SqlDbType.VarChar, 20).Value = SortCol;
+                command.Parameters.Add("@SortOrder", SqlDbType.VarChar, 4).Value = SortOrder;
+
                 return ExecuteStoredProc(command);
             }
         }
 
-        public IEnumerable<Student> GetStudents(int pageno, int @PageSize, string sortcol, string sortorder)
+        public IEnumerable<Student> GetStudents(int PageNo, int PageSize, string SortCol, string SortOrder)
         {
             //string strSQL = "SELECT * FROM vwListStudents WHERE ID >=" + StartIndex + " AND ID <=" + EndIndex;
             //strSQL += " ORDER BY " + sortCol + " " + sortOrder;
             //strSQL += ";SELECT COUNT(*) AS Count FROM vwListStudents";
             //var command = new SqlCommand(strSQL);
             //return GetRecords(command);
-            if (pageno <= 0) pageno = 1;
+            if (PageNo <= 0) PageNo = 1;
 
             using (var command = new SqlCommand("USP_GetStudentData"))
             {
-                command.Parameters.Add("@PageNbr", SqlDbType.Int).Value = pageno;
+                command.Parameters.Add("@PageNbr", SqlDbType.Int).Value = PageNo;
                 command.Parameters.Add("@PageSize",SqlDbType.Int).Value=  PageSize;
-                command.Parameters.Add("@SortColumn", SqlDbType.VarChar,20).Value = sortcol;
-                command.Parameters.Add("@SortOrder", SqlDbType.VarChar, 4).Value = sortorder;
+                command.Parameters.Add("@SortColumn", SqlDbType.VarChar, 20).Value = SortCol;
+                command.Parameters.Add("@SortOrder", SqlDbType.VarChar, 4).Value = SortOrder;
                 return ExecuteStoredProc(command);
             }
-
         }
 
         public override Student PopulateRecord(SqlDataReader reader)

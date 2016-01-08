@@ -86,6 +86,7 @@
 <h2>Grid with partial view & style pager</h2>
 <script>
     var loaderUrl = '@Url.Content("~/images/loader.gif")';
+    var updateUrl = '@Url.Action("UpdateStudents", "Student")';
 </script>
 
 @using (@Html.BeginForm("List", "Student", FormMethod.Post, new { @id = "frmDetails" }))

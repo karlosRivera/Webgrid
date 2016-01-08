@@ -131,12 +131,19 @@ function SetUpNavQueryString() {
 }
 
 $(document).ajaxStart(function () {
-    $('#loader').show();
+    //$('#loader').show();
+    toggleLoader();
 });
 
 $(document).ajaxComplete(function () {
-    $('#loader').hide();
+    //$('#loader').hide();
+    toggleLoader();
 })
+
+function toggleLoader()
+{
+    $('#loader').toggle();
+}
 
 $(function () {
     $(document).on('click', '.edit-user', function () {
@@ -187,7 +194,6 @@ $(function () {
     });
 
     $(document).on('click', '.save-user', function () {
-
         var tr = $(this).parents('tr:first');
 
         var Sortdir = $("#dir").val();
@@ -198,12 +204,14 @@ $(function () {
         var FirstName = tr.find("input[id*='txtFirstName']").val();
         var LastName = tr.find("input[id*='txtLastName']").val();
         var StateID = tr.find("select[id*='cboState'] :selected").val();
+        var StateName = tr.find("select[id*='cboState'] :selected").text();
         var CityID = tr.find("select[id*='cboCity'] :selected").val();
+        var CityName = tr.find("select[id*='cboCity'] :selected").text();
         var IsActive = $("[class*='box']").is(':checked');
 
         var data = new Object();
         var StudentArray = [];
-        StudentArray.push(PopulateStudent(ID, FirstName, LastName, StateID, CityID, IsActive));
+        StudentArray.push(PopulateStudent(ID, FirstName, LastName, StateID, StateName, CityID, CityName, IsActive));
 
         data.page = page;
         data.sort = Sortcol;
@@ -216,7 +224,6 @@ $(function () {
             $(tr).find("td:nth-child(3)").removeClass("PadOff");
             $(tr).find("td:nth-child(4)").removeClass("PadOff");
             $(tr).find("td:nth-child(5)").removeClass("PadOff");
-
         }
 
         $(tr).find("td:nth-child(2)").addClass("PadOn");
@@ -225,7 +232,7 @@ $(function () {
         $(tr).find("td:nth-child(5)").addClass("PadOn");
 
         $.ajax({
-            url: '@Url.Action("UpdateStudents", "Student")',
+            url: updateUrl,
             data: JSON.stringify({ oSVm: data }),
             type: 'POST',
             contentType: 'application/json; charset=utf-8',
@@ -233,20 +240,19 @@ $(function () {
                 alert(data);
             }
         });
-
-
         return false;
-
     });
 
-    function PopulateStudent(id, firstname, lastname, stateid, cityid, isactive) {
+    function PopulateStudent(id, firstname, lastname, stateid, statename, cityid, cityname, isactive) {
         var Student = new Object();
         Student.ID = id;
         Student.FirstName = firstname;
         Student.LastName = lastname;
         Student.IsActive = isactive;
         Student.StateID = stateid;
+        Student.StateName = statename;
         Student.CityID = cityid;
+        Student.CityName = cityname;
         return Student;
     }
 })

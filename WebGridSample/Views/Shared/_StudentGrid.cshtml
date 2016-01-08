@@ -27,8 +27,8 @@
             grid.Column(columnName: "FirstName", header: "First Name", format: @<text><span class="display-mode">@item.FirstName</span><input type="text" id="txtFirstName" value="@item.FirstName" class="edit-mode" /></text>,style:"NameColWidth" ),
             grid.Column(columnName: "LastName", header: "Last Name", format: @<text><span class="display-mode">@item.LastName</span><input type="text" id="txtLastName" value="@item.LastName" class="edit-mode" /></text>,style:"NameColWidth"),
 
-            grid.Column(columnName: "StateName", header: "State Name", format: @<text><input type="hidden" name="HiddenID" value="@item.StateID" id="HiddenStateID" /><span class="display-mode">@item.StateName</span>@Html.DropDownListFor(x => x.SelectedStateId, new SelectList(Model.States, "ID", "Name", Model.SelectedStateId= item.StateID), "-- Select States--", new { id = "cboState", @class = "edit-mode" })</text>,style:"NameColWidth"),
-            grid.Column(columnName: "CityName", header: "City Name", format: @<text><input type="hidden" name="HiddenID" value="@item.CityID" id="HiddenCityID" /><span class="display-mode">@item.CityName</span>@Html.DropDownListFor(x => x.SelectedCityId, new SelectList(Model.Cities, "ID", "Name", Model.SelectedCityId = item.CityID), "-- Select City--", new { id = "cboCity", @class = "edit-mode" })
+            grid.Column(columnName: "StateName", header: "State Name", format: @<text><span class="display-mode">@item.StateName</span>@Html.DropDownListFor(x => x.SelectedStateId, new SelectList(Model.States, "ID", "Name", Model.SelectedStateId= item.StateID), "-- Select States--", new { id = "cboState", @class = "edit-mode" })</text>,style:"NameColWidth"),
+            grid.Column(columnName: "CityName", header: "City Name", format: @<text><span class="display-mode">@item.CityName</span>@Html.DropDownListFor(x => x.SelectedCityId, new SelectList(Model.Cities, "ID", "Name", Model.SelectedCityId = item.CityID), "-- Select City--", new { id = "cboCity", @class = "edit-mode" })
 </text>,style:"NameColWidth"),
             grid.Column(header: "IsActive",
             format: @<text><input id="select" class="box" name="select"
