@@ -4,6 +4,7 @@
     WebGrid grid = new WebGrid(null, rowsPerPage: Model.PageSize, canPage: true,
         defaultSort: Model.sort, ajaxUpdateContainerId: "gridContent", ajaxUpdateCallback: "initScripts");
     grid.Bind(Model.Students, autoSortAndPage: false, rowCount: Model.RowCount);
+    grid.PageIndex = Model.CurrentPage;
 }
 
 
@@ -53,7 +54,6 @@
 @Html.Hidden("firstRecord", (grid.PageIndex * grid.RowsPerPage) + 1)
 @Html.Hidden("lastRecord", (grid.PageIndex * grid.RowsPerPage) + grid.Rows.Count())
 @Html.Hidden("TotalRows", grid.TotalRowCount)
-@*@Html.Hidden("loaderUrl",@Url.Content("~/images/loader.gif"))*@
 
 
 

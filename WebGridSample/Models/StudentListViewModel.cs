@@ -146,7 +146,7 @@ namespace WebGridSample.Models
 
             StartIndex = ((oSVm.page * oSVm.PageSize) - oSVm.PageSize) + 1;
             EndIndex = (oSVm.page * oSVm.PageSize);
-            CurrentPage = StartIndex;
+            CurrentPage = (StartIndex - 1) / oSVm.PageSize;
 
             if (string.IsNullOrEmpty(oSVm.sort))
                 oSVm.sort = "ID";

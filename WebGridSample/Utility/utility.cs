@@ -20,7 +20,7 @@ namespace WebGridSample.Utility
             var xmlNs = new XmlSerializerNamespaces();
             xmlNs.Add(string.Empty, string.Empty);
 
-            using (StringWriter sw = new StringWriter())
+            using (StringWriter sw = new Utf8StringWriter())
             {
                 serializer.Serialize(sw, obj, xmlNs);
                 return sw.ToString();
@@ -28,8 +28,15 @@ namespace WebGridSample.Utility
         }
     }
 
-//    public class Utf8StringWriter : StringWriter
-//{
-//        public override Encoding Encoding => Encoding.UTF8;
-//    }
+    public class Utf8StringWriter : StringWriter
+    {
+        public override Encoding Encoding
+        {
+            get
+            {
+                return Encoding.UTF8;
+            }
+        }
+        //public override Encoding Encoding = Encoding.UTF8;
+    }
 }
