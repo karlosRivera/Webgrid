@@ -44,20 +44,3 @@ https://stick2basic.wordpress.com/2013/03/09/if-condition-or-for-loop-in-a-mvc-w
 Efficient Paging with WebGrid Web Helper – good
 https://stick2basic.wordpress.com/2013/02/20/asp-net-mvc-web-grid-with-efficient-paging/
 
-
-		Declare @Data XML
-	    SET @Data = '<?xml version="1.0" encoding="utf-16"?>
-				<Students>
-				  <Student>
-					<ID>2</ID>
-					<FirstName>Tridip1</FirstName>
-					<LastName>Bhattacharjee</LastName>
-					<IsActive>true</IsActive>
-					<StateID>2</StateID>
-					<StateName>Bihar</StateName>
-					<CityID>4</CityID>
-					<CityName>DharBganga</CityName>
-				  </Student>
-				</Students>'  
-
-				exec USP_SaveStudent @Data,1,5,'ID','ASC'
