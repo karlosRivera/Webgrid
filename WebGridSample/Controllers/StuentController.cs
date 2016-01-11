@@ -40,9 +40,6 @@ namespace WebGridSample.Controllers
             SVm.States = _Statedata.GetAll().ToList();
             SVm.Cities = _Citydata.GetAll().ToList();
             SVm.RowCount = _Studentdata.DataCounter;
-            //SVm.CurrentPage = (int)Math.Ceiling((double)((SVm.RowCount + SVm.PageSize - 1) / (double)SVm.PageSize));
-
-
             return View("ListStudents",SVm);
         }
 
@@ -59,8 +56,6 @@ namespace WebGridSample.Controllers
             SVm.States = _Statedata.GetAll().ToList();
             SVm.Cities = _Citydata.GetAll().ToList();
             SVm.RowCount = _Studentdata.DataCounter;
-            //SVm.CurrentPage = (int)Math.Ceiling((double)SVm.RowCount / (double)SVm.PageSize);
-            //int TotalNumberOfPages = (int)Math.Ceiling((double)NumberOfItems / (double)PageSize);
             return PartialView("_StudentGrid", SVm);
         }
 

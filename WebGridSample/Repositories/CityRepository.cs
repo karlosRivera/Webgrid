@@ -23,7 +23,7 @@ namespace DataLayer.Repository
         {
             // DBAs across the country are having strokes 
             //  over this next command!
-            using (var command = new SqlCommand("SELECT ID, CityName FROM City"))
+            using (var command = new SqlCommand("SELECT ID, CityName,StateID FROM City"))
             {
                 return GetRecords(command);
             }
@@ -54,7 +54,8 @@ namespace DataLayer.Repository
             return new City
             {
                 ID = Convert.ToInt32(reader["ID"].ToString()),
-                Name = reader["CityName"].ToString()
+                Name = reader["CityName"].ToString(),
+                StateID = Convert.ToInt32(reader["StateId"].ToString())
             };
         }
 
