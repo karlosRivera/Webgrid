@@ -102,6 +102,7 @@ namespace DataLayer.Repository
         {
             var reader = (SqlDataReader)null;
             var list = new List<T>();
+
             try
             {
                 command.Connection = _connection;

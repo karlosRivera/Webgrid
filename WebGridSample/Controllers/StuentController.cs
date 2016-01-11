@@ -17,9 +17,15 @@ namespace WebGridSample.Controllers
 
         public StudentController()
         {
+
             _Studentdata = new StudentRepository(System.Configuration.ConfigurationManager.ConnectionStrings["StudentDBContext"].ConnectionString);
             _Statedata = new StateRepository(System.Configuration.ConfigurationManager.ConnectionStrings["StudentDBContext"].ConnectionString);
             _Citydata = new CityRepository(System.Configuration.ConfigurationManager.ConnectionStrings["StudentDBContext"].ConnectionString);
+
+            //_Studentdata = new StudentRepository(System.Configuration.ConfigurationManager.ConnectionStrings["StudentSQLDBContext"].ConnectionString);
+            //_Statedata = new StateRepository(System.Configuration.ConfigurationManager.ConnectionStrings["StudentSQLDBContext"].ConnectionString);
+            //_Citydata = new CityRepository(System.Configuration.ConfigurationManager.ConnectionStrings["StudentSQLDBContext"].ConnectionString);
+
         }
 
         // GET: Stuent
@@ -34,20 +40,28 @@ namespace WebGridSample.Controllers
             SVm.States = _Statedata.GetAll().ToList();
             SVm.Cities = _Citydata.GetAll().ToList();
             SVm.RowCount = _Studentdata.DataCounter;
+            //SVm.CurrentPage = (int)Math.Ceiling((double)((SVm.RowCount + SVm.PageSize - 1) / (double)SVm.PageSize));
+
+
             return View("ListStudents",SVm);
         }
 
         [HttpPost]
         public ActionResult UpdateStudents(StudentListViewModel oSVm)
         {
-            //System.Threading.Thread.Sleep(1000); // just simulate delay of one second
+            if (Request.IsAjaxRequest())
+                System.Threading.Thread.Sleep(1000); // just simulate delay of one second
+
             StudentListViewModel SVm = new StudentListViewModel();
             SVm.SetUpParams(oSVm);
-            SVm.Students = _Studentdata.SaveXML(new List<Student>(oSVm.Students).ToXml("Students").Replace("utf-16","UTF-8"), oSVm.page, oSVm.PageSize, oSVm.sort, oSVm.sortdir).ToList();
+            SVm.Students = _Studentdata.SaveXML(new List<Student>(oSVm.Students).ToXml("Students"), 
+                oSVm.page, oSVm.PageSize, oSVm.sort, oSVm.sortdir).ToList();
             SVm.States = _Statedata.GetAll().ToList();
             SVm.Cities = _Citydata.GetAll().ToList();
             SVm.RowCount = _Studentdata.DataCounter;
-            return View("ListStudents", SVm);
+            //SVm.CurrentPage = (int)Math.Ceiling((double)SVm.RowCount / (double)SVm.PageSize);
+            //int TotalNumberOfPages = (int)Math.Ceiling((double)NumberOfItems / (double)PageSize);
+            return PartialView("_StudentGrid", SVm);
         }
 
     }

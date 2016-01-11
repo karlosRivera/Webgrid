@@ -43,7 +43,7 @@ namespace DataLayer.Repository
 
             using (var command = new SqlCommand("USP_SaveStudent"))
             {
-                command.Parameters.Add("@Data", SqlDbType.Xml).Value = strXML;
+                command.Parameters.Add("@Data", SqlDbType.VarChar,-1).Value = strXML;
                 command.Parameters.Add("@PageNbr", SqlDbType.Int).Value = PageNo;
                 command.Parameters.Add("@PageSize", SqlDbType.Int).Value = PageSize;
                 command.Parameters.Add("@SortColumn", SqlDbType.VarChar, 20).Value = SortCol;

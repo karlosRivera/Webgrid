@@ -18,6 +18,7 @@ function PagerUI()
 
     $elements.each(function () {
         if (!$(this).html()) {
+            $('#page').val($.trim($(this).text()));
             $item = $('<li class="current" />').append($(this));
         }
         else {
@@ -85,13 +86,16 @@ function SetSortArrows() {
     */
     var dir = $('#dir').val();
     var col = $('#col').val();
+    //$("#col").val(col);
 
     var header = $('th a[href*=' + col + ']');
     if (dir == 'Ascending') {
         header.text(header.text() + ' ▲');
+        $("#dir").val('ASC')
     }
     if (dir == 'Descending') {
         header.text(header.text() + ' ▼');
+        $("#dir").val('DESC')
     }
 }
 
@@ -111,14 +115,15 @@ function SetUpNavQueryString() {
         var res = this.href.split("&");
         var ColOrder = '';
         if (res.length <= 1) {
-            if ($('#dir').val() === 'Ascending') {
+            if ($('#dir').val() === 'Ascending' || $('#dir').val() === 'ASC') {
                 ColOrder = 'ASC';
             }
-            else if ($('#dir').val() === 'Descending') {
+            else if ($('#dir').val() === 'Descending' || $('#dir').val() === 'DESC') {
                 ColOrder = 'DESC';
             }
 
             this.href = this.href + '&sort=' + $('#col').val() + '&sortdir=' + ColOrder;
+            this.href = this.href.replace('UpdateStudents', 'List')
         }
     });
 
@@ -131,13 +136,13 @@ function SetUpNavQueryString() {
 }
 
 $(document).ajaxStart(function () {
-    //$('#loader').show();
-    toggleLoader();
+    $('#loader').show();
+    //toggleLoader();
 });
 
 $(document).ajaxComplete(function () {
-    //$('#loader').hide();
-    toggleLoader();
+    $('#loader').hide();
+    //toggleLoader();
 })
 
 function toggleLoader()
@@ -237,7 +242,9 @@ $(function () {
             type: 'POST',
             contentType: 'application/json; charset=utf-8',
             success: function (data) {
-                alert(data);
+                //alert(data);
+                $('#gridContent').html(data);
+                initScripts();
             }
         });
         return false;
