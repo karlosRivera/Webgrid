@@ -39,13 +39,13 @@ namespace DataLayer.Repository
             }
         }
 
-        public City GetCityByStateId(string stateid)
+        public IEnumerable<City> GetCityByStateId(int stateid)
         {
             // PARAMETERIZED QUERIES!
-            using (var command = new SqlCommand("SELECT ID, CityName FROM City WHERE StateId = @stateid"))
+            using (var command = new SqlCommand("SELECT ID, CityName,StateId FROM City WHERE StateId = @stateid"))
             {
-                command.Parameters.Add(new ObjectParameter("StateId", stateid));
-                return GetRecord(command);
+                command.Parameters.Add("StateId", DbType.Int32).Value = stateid;
+                return GetRecords(command);
             }
         }
 

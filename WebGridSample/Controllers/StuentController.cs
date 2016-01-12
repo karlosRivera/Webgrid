@@ -59,5 +59,14 @@ namespace WebGridSample.Controllers
             return PartialView("_StudentGrid", SVm);
         }
 
+        [HttpGet]
+        public JsonResult GetCityName(int StateID)
+        {
+            if (Request.IsAjaxRequest())
+                System.Threading.Thread.Sleep(1000); // just simulate delay of one second
+
+            return Json(_Citydata.GetCityByStateId(StateID) , JsonRequestBehavior.AllowGet);
+        }
+
     }
 }

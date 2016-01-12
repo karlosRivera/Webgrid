@@ -151,9 +151,33 @@ function toggleLoader()
 }
 
 $(document).on('change', '[id*="cboState"]', function () {
-    alert('State ' + $(this).children(":selected").text() + ' ' + $(this).val());
+    //alert('State ' + $(this).children(":selected").text() + ' ' + $(this).val());
+
     var cboCity = $(this).closest('tr').find("select[id*='cboCity']");
-    cboCity.find("option:not([value=''])").remove();
+
+    if ($(this).val() != '') {
+        $.ajax({
+            url: CascadeUrl,
+            data: { StateID: $(this).val() },
+            type: 'GET',
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                //$.each(data, function (i, item) {
+                //    alert(item[i].CityID + ' ' + item[i].CityName);
+                //    //items += "<option value=\"" + item.CityID + "\">" + item.CityName + "</option>";
+                //});                //    cboCity.find("option:not([value=''])").remove();
+                //$('#gridContent').html(data);
+                //initScripts();
+
+                $.each(data, function (i, j) {
+                    alert(j[i].ID + ' ' + j[i].Name);
+                    
+                });
+            }
+        });
+    }
+    return false;
+
 });
 
 $(function () {
