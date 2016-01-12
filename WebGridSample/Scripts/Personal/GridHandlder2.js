@@ -150,6 +150,12 @@ function toggleLoader()
     $('#loader').toggle();
 }
 
+$(document).on('change', '[id*="cboState"]', function () {
+    alert('State ' + $(this).children(":selected").text() + ' ' + $(this).val());
+    var cboCity = $(this).closest('tr').find("select[id*='cboCity']");
+    cboCity.find("option:not([value=''])").remove();
+});
+
 $(function () {
     $(document).on('click', '.edit-user', function () {
         var tr = $(this).parents('tr:first');
