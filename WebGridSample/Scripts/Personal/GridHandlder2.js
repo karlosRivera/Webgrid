@@ -136,13 +136,12 @@ function SetUpNavQueryString() {
 }
 
 $(document).ajaxStart(function () {
+    alert('pop');
     $('#loader').show();
-    //toggleLoader();
 });
 
 $(document).ajaxComplete(function () {
     $('#loader').hide();
-    //toggleLoader();
 })
 
 function toggleLoader()
@@ -150,9 +149,11 @@ function toggleLoader()
     $('#loader').toggle();
 }
 
-$(document).on('change', '[id*="cboState"]', function () {
-    //alert('State ' + $(this).children(":selected").text() + ' ' + $(this).val());
+$(document).on('click', '.webgrid-header a, .webgrid-footer a', function () {
+    alert('Click on link');
+});
 
+$(document).on('change', '[id*="cboState"]', function () {
     var cboCity = $(this).closest('tr').find("select[id*='cboCity']");
 
     if ($(this).val() != '') {
@@ -162,16 +163,11 @@ $(document).on('change', '[id*="cboState"]', function () {
             type: 'GET',
             contentType: 'application/json; charset=utf-8',
             success: function (data) {
-                //$.each(data, function (i, item) {
-                //    alert(item[i].CityID + ' ' + item[i].CityName);
-                //    //items += "<option value=\"" + item.CityID + "\">" + item.CityName + "</option>";
-                //});                //    cboCity.find("option:not([value=''])").remove();
-                //$('#gridContent').html(data);
-                //initScripts();
-
-                $.each(data, function (i, j) {
-                    alert(j[i].ID + ' ' + j[i].Name);
-                    
+                cboCity.find(" option:not([value=''])").remove();
+                $.each(data.CityList, function (i, item) {
+                    cboCity.append(
+                            $('<option></option>').val(item.ID).html(item.Name)
+                        );
                 });
             }
         });

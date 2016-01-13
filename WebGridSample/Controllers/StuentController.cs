@@ -65,7 +65,7 @@ namespace WebGridSample.Controllers
             if (Request.IsAjaxRequest())
                 System.Threading.Thread.Sleep(1000); // just simulate delay of one second
 
-            return Json(_Citydata.GetCityByStateId(StateID) , JsonRequestBehavior.AllowGet);
+            return Json(new {CityList =_Citydata.GetCityByStateId(StateID)} , JsonRequestBehavior.AllowGet);
         }
 
     }
