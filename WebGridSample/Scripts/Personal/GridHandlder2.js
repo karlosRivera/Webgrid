@@ -136,7 +136,6 @@ function SetUpNavQueryString() {
 }
 
 $(document).ajaxStart(function () {
-    alert('pop');
     $('#loader').show();
 });
 
@@ -149,11 +148,30 @@ function toggleLoader()
     $('#loader').toggle();
 }
 
-$(document).on('click', '.webgrid-header a, .webgrid-footer a', function () {
-    alert('Click on link');
+//$(document).on('click', '.webgrid-header a, .webgrid-footer a', function () {
+//    alert('Click on link');
+//});
+
+
+
+jQuery(document).on('blur', ".webgrid-table input[type=text]", function ()
+{
+    alert('textbox blur');
+    var tableRow = $(this).closest('tr');
+    UpdateRecord(tableRow);
 });
 
+function UpdateRecord(tableRow)
+{
+
+}
+
 $(document).on('change', '[id*="cboState"]', function () {
+    alert('cboState click');
+
+    var tableRow = $(this).closest('tr');
+    UpdateRecord(tableRow);
+
     var cboCity = $(this).closest('tr').find("select[id*='cboCity']");
 
     if ($(this).val() != '') {
@@ -173,8 +191,22 @@ $(document).on('change', '[id*="cboState"]', function () {
         });
     }
     return false;
-
 });
+
+$(document).on('change', '[id*="cboCity"]', function () {
+    alert('cboCity click');
+
+    var tableRow = $(this).closest('tr');
+    UpdateRecord(tableRow);
+});
+
+$(document).on('click', '[id*="select"]', function () {
+    alert('checkbox click');
+
+    var tableRow = $(this).closest('tr');
+    UpdateRecord(tableRow);
+});
+
 
 $(function () {
     $(document).on('click', '.edit-user', function () {
