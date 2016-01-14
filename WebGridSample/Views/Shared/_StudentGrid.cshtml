@@ -2,11 +2,14 @@
 
 @{
     WebGrid grid = new WebGrid(null, rowsPerPage: Model.PageSize, canPage: true,
-        defaultSort: Model.sort, ajaxUpdateContainerId: "gridContent", ajaxUpdateCallback: "initScripts");
+        defaultSort: Model.sort); 
     grid.Bind(Model.Students, autoSortAndPage: false, rowCount: Model.RowCount);
     grid.PageIndex = Model.CurrentPage;
+    
+
 }
 
+    @*, ajaxUpdateContainerId: "gridContent", ajaxUpdateCallback: "initScripts"*@
 
 @grid.GetHtml(
         tableStyle: "webgrid-table",
@@ -38,7 +41,7 @@
 
              grid.Column("Action", format: @<text>
                         <button class="edit-user display-mode btnGreen">Edit</button>
-                        <button class="edit-user display-mode btnRed">Delete</button>
+                        <button class="delete-user display-mode btnRed">Delete</button>
                         <button class="save-user edit-mode btnGreen">Save</button>
                         <button class="cancel-user edit-mode btnSky">Cancel</button>
             </text>, style: "ActionCol", canSort: false)

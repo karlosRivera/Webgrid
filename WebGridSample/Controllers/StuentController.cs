@@ -44,15 +44,40 @@ namespace WebGridSample.Controllers
         }
 
         [HttpPost]
-        public ActionResult UpdateStudents(StudentListViewModel oSVm)
+        public ActionResult UpdateStudents(StudentListViewModel oSVm, string Action)
         {
             if (Request.IsAjaxRequest())
                 System.Threading.Thread.Sleep(1000); // just simulate delay of one second
 
             StudentListViewModel SVm = new StudentListViewModel();
             SVm.SetUpParams(oSVm);
-            SVm.Students = _Studentdata.SaveXML(new List<Student>(oSVm.Students).ToXml("Students"), 
-                oSVm.page, oSVm.PageSize, oSVm.sort, oSVm.sortdir).ToList();
+            if (Action == "UPDATE")
+            {
+                SVm.Students = _Studentdata.SaveXML(new List<Student>(oSVm.Students).ToXml("Students"),
+                    oSVm.page, oSVm.PageSize, oSVm.sort, oSVm.sortdir).ToList();
+            }
+            else if (Action == "DELETE")
+            {
+                SVm.Students = _Studentdata.Delete(oSVm.Students[0].ID,
+                    oSVm.page, oSVm.PageSize, oSVm.sort, oSVm.sortdir).ToList();
+
+            }
+
+            SVm.States = _Statedata.GetAll().ToList();
+            SVm.Cities = _Citydata.GetAll().ToList();
+            SVm.RowCount = _Studentdata.DataCounter;
+            return PartialView("_StudentGrid", SVm);
+        }
+
+        [HttpPost]
+        public ActionResult RefreshStudents(StudentListViewModel oSVm)
+        {
+            if (Request.IsAjaxRequest())
+                System.Threading.Thread.Sleep(1000); // just simulate delay of one second
+
+            StudentListViewModel SVm = new StudentListViewModel();
+            SVm.SetUpParams(oSVm);
+            SVm.Students = _Studentdata.GetStudents(oSVm.page, oSVm.PageSize, oSVm.sort, oSVm.sortdir).ToList();
             SVm.States = _Statedata.GetAll().ToList();
             SVm.Cities = _Citydata.GetAll().ToList();
             SVm.RowCount = _Studentdata.DataCounter;

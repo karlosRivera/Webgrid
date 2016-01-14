@@ -1,5 +1,10 @@
-﻿
-function PagerUI()
+﻿var _sort;
+var _sortdir;
+var _page;
+var _sortCol;
+var header;
+
+function SetUpPagerUI()
 {
     var firstRecord=$('#firstRecord').val();
     var lastRecord = $('#lastRecord').val();
@@ -50,8 +55,9 @@ function initScripts() {
     $('.edit-mode').hide();
     SetSortArrows();
     //SetPagerNavImage();
-    PagerUI();
+    SetUpPagerUI();
     SetUpNavQueryString();
+    SetUpLinks();
 }
 
 function SetPagerNavImage() {
@@ -80,24 +86,7 @@ function SetPagerNavImage() {
     });
 }
 
-function SetSortArrows() {
-    /*
-        First find anchor by href pattern and set icon up or down for sorting direction wise
-    */
-    var dir = $('#dir').val();
-    var col = $('#col').val();
-    //$("#col").val(col);
 
-    var header = $('th a[href*=' + col + ']');
-    if (dir == 'Ascending') {
-        header.text(header.text() + ' ▲');
-        $("#dir").val('ASC')
-    }
-    if (dir == 'Descending') {
-        header.text(header.text() + ' ▼');
-        $("#dir").val('DESC')
-    }
-}
 
 function SetUpNavQueryString() {
     /*
@@ -123,7 +112,7 @@ function SetUpNavQueryString() {
             }
 
             this.href = this.href + '&sort=' + $('#col').val() + '&sortdir=' + ColOrder;
-            this.href = this.href.replace('UpdateStudents', 'List')
+            //this.href = this.href.replace('UpdateStudents', 'List')
         }
     });
 
@@ -148,26 +137,118 @@ function toggleLoader()
     $('#loader').toggle();
 }
 
-//$(document).on('click', '.webgrid-header a, .webgrid-footer a', function () {
-//    alert('Click on link');
+function SetSortArrows() {
+    /*
+        First find anchor by href pattern and set icon up or down for sorting direction wise
+    */
+    var dir = $('#dir').val();
+    var col = $('#col').val();
+    header = $('th a[href*=' + col + ']');
+    if (dir == 'Ascending' || dir == 'ASC') {
+        header.text(header.text() + ' ▲');
+        //$("#dir").val('DESC')
+    }
+    if (dir == 'Descending' || dir == 'DESC') {
+        header.text(header.text() + ' ▼');
+        //$("#dir").val('ASC')
+    }
+}
+
+$(document).on('click', '.webgrid-header a', function () {
+    params = getUrlVars($(this).attr('href'));
+    _sort = params["sort"];
+    _sortdir = params["sortdir"];
+    _page = params["page"];
+    _sortCol = $("#col").val();
+
+    $("#page").val(_page);
+    $("#dir").val(_sortdir)
+
+    if (_sort != $("#col").val())
+    {
+        $("#dir").val('ASC');
+    }
+    $("#col").val(_sort);
+
+    RefreshGrid();
+    return false;
+});
+
+$(document).on('click', '.webgrid-footer a', function () {
+    params = getUrlVars($(this).attr('href'));
+    $("#page").val(params["page"]);
+    RefreshGrid();
+    return false;
+});
+
+function RefreshGrid() {
+    var data = new Object();
+    var Sortdir = $("#dir").val();
+    var Sortcol = $("#col").val();
+    var page = $("#page").val();
+
+    data.page = page;
+    data.sort = Sortcol;
+    data.sortdir = Sortdir;
+
+    $.ajax({
+        url: RefreshUrl,
+        data: JSON.stringify({ oSVm: data }),
+        type: 'POST',
+        contentType: 'application/json; charset=utf-8',
+        success: function (data) {
+            $('#gridContent').html(data);
+            $("#page").val(page);
+            $("#col").val(Sortcol);
+            $("#dir").val(Sortdir);
+            initScripts();
+            //SetUpLinks();
+        }
+    });
+}
+
+function SetUpLinks()
+{
+    if ($('#dir').val() === 'ASC') {
+        header.attr('href', header.attr('href').replace('ASC', 'DESC'));
+    }
+    else if ($('#dir').val() === 'DESC') {
+        header.attr('href', header.attr('href').replace('DESC', 'ASC'));
+    }
+
+    $(".webgrid-footer a").each(function () {
+        if ($('#dir').val() === 'ASC') {
+            this.href = this.href.replace('ASC', 'DESC')
+        }
+        else if ($('#dir').val() === 'DESC') {
+            this.href = this.href.replace('DESC', 'ASC')
+        }
+    });
+
+}
+//jQuery(document).on('blur', ".webgrid-table input[type=text]", function ()
+//{
+//    alert('textbox blur');
+//    var tableRow = $(this).closest('tr');
+//    UpdateRecord(tableRow);
 //});
 
 
+//$(document).on('change', '[id*="cboCity"]', function () {
+//    alert('cboCity click');
 
-jQuery(document).on('blur', ".webgrid-table input[type=text]", function ()
-{
-    alert('textbox blur');
-    var tableRow = $(this).closest('tr');
-    UpdateRecord(tableRow);
-});
+//    var tableRow = $(this).closest('tr');
+//    UpdateRecord(tableRow);
+//});
 
-function UpdateRecord(tableRow)
-{
+//$(document).on('click', '[id*="select"]', function () {
+//    alert('checkbox click');
 
-}
+//    var tableRow = $(this).closest('tr');
+//    UpdateRecord(tableRow);
+//});
 
 $(document).on('change', '[id*="cboState"]', function () {
-    alert('cboState click');
 
     var tableRow = $(this).closest('tr');
     UpdateRecord(tableRow);
@@ -193,19 +274,6 @@ $(document).on('change', '[id*="cboState"]', function () {
     return false;
 });
 
-$(document).on('change', '[id*="cboCity"]', function () {
-    alert('cboCity click');
-
-    var tableRow = $(this).closest('tr');
-    UpdateRecord(tableRow);
-});
-
-$(document).on('click', '[id*="select"]', function () {
-    alert('checkbox click');
-
-    var tableRow = $(this).closest('tr');
-    UpdateRecord(tableRow);
-});
 
 
 $(function () {
@@ -296,17 +364,66 @@ $(function () {
 
         $.ajax({
             url: updateUrl,
-            data: JSON.stringify({ oSVm: data }),
+            data: JSON.stringify({ oSVm: data, 'Action': 'UPDATE' }),
             type: 'POST',
             contentType: 'application/json; charset=utf-8',
             success: function (data) {
                 //alert(data);
                 $('#gridContent').html(data);
+                $("#page").val(page);
+                $("#col").val(Sortcol);
+                $("#dir").val(Sortdir);
+
                 initScripts();
+                //SetUpLinks();
             }
         });
         return false;
     });
+
+    $(document).on('click', '.btnRed', function () {
+        var tr = $(this).parents('tr:first');
+        var Sortdir = $("#dir").val();
+        var Sortcol = $("#col").val();
+        var page = $("#page").val();
+
+        var ID = tr.find("input[id*='HiddenID']").val();
+        var FirstName = '';
+        var LastName = '';
+        var StateID = 0;
+        var StateName = '';
+        var CityID = 0;
+        var CityName = '';
+        var IsActive = 0;
+
+        var data = new Object();
+        var StudentArray = [];
+        StudentArray.push(PopulateStudent(ID, FirstName, LastName, StateID, StateName, CityID, CityName, IsActive));
+
+        data.page = page;
+        data.sort = Sortcol;
+        data.sortdir = Sortdir;
+        data.Students = StudentArray;
+
+        if (confirm("Are you sure you want to delete?")) {
+            $.ajax({
+                url: updateUrl,
+                data: JSON.stringify({ oSVm: data, 'Action': 'DELETE' }),
+                type: 'POST',
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    $('#gridContent').html(data);
+                    $("#page").val(page);
+                    $("#col").val(Sortcol);
+                    $("#dir").val(Sortdir);
+
+                    initScripts();
+                }
+            });
+        }
+        return false;
+    });
+
 
     function PopulateStudent(id, firstname, lastname, stateid, statename, cityid, cityname, isactive) {
         var Student = new Object();
@@ -321,3 +438,19 @@ $(function () {
         return Student;
     }
 })
+
+
+
+function getUrlVars(url) {
+    var vars = [], hash;
+    var hashes = url.slice(url.indexOf('?') + 1).split('&');
+    for (var i = 0; i < hashes.length; i++) {
+        hash = hashes[i].split('=');
+        vars.push(decodeURIComponent(hash[0]));
+        vars[decodeURIComponent(hash[0])] = decodeURIComponent(hash[1]);
+    }
+    if (vars[0] == url) {
+        vars = [];
+    }
+    return vars;
+}

@@ -53,6 +53,22 @@ namespace DataLayer.Repository
             }
         }
 
+        public IEnumerable<Student> Delete(int id, int PageNo, int PageSize, string SortCol, string SortOrder)
+        {
+            if (PageNo <= 0) PageNo = 1;
+
+            using (var command = new SqlCommand("USP_DeleteStudent"))
+            {
+                command.Parameters.Add("@ID", SqlDbType.VarChar, -1).Value = id;
+                command.Parameters.Add("@PageNbr", SqlDbType.Int).Value = PageNo;
+                command.Parameters.Add("@PageSize", SqlDbType.Int).Value = PageSize;
+                command.Parameters.Add("@SortColumn", SqlDbType.VarChar, 20).Value = SortCol;
+                command.Parameters.Add("@SortOrder", SqlDbType.VarChar, 4).Value = SortOrder;
+
+                return ExecuteStoredProc(command);
+            }
+        }
+
         public IEnumerable<Student> GetStudents(int PageNo, int PageSize, string SortCol, string SortOrder)
         {
             //string strSQL = "SELECT * FROM vwListStudents WHERE ID >=" + StartIndex + " AND ID <=" + EndIndex;
@@ -60,7 +76,12 @@ namespace DataLayer.Repository
             //strSQL += ";SELECT COUNT(*) AS Count FROM vwListStudents";
             //var command = new SqlCommand(strSQL);
             //return GetRecords(command);
-            if (PageNo <= 0) PageNo = 1;
+            if (SortOrder == "Ascending")
+                SortOrder = "ASC";
+            else if (SortOrder == "Descending")
+                SortOrder = "DESC";
+
+                if (PageNo <= 0) PageNo = 1;
 
             using (var command = new SqlCommand("USP_GetStudentData"))
             {
