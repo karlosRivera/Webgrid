@@ -251,6 +251,13 @@ $(document).on('click', '[id*="select"]', function () {
     saveToLocalStore(tableRow);
 });
 
+$(document).ready(function () {
+    $("#btnSaveAll").click(function () {
+        alert("Data Saved");
+        return false;
+    });
+})
+
 function saveToLocalStore(tableRow) {
 
     var ID = tableRow.find("input[id*='HiddenID']").val();
