@@ -286,7 +286,6 @@ $(document).on('change', '[id*="cboState"]', function () {
 });
 
 function HideToolTips(tblRow) {
-    alert('row index ' + tblRow);
     $('#StudentGrid tbody > tr').each(function (i, row) {
         if (tblRow < 0) {
             $(this).find("input[id*='FirstName']").tooltip('hide');

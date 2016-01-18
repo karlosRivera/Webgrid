@@ -26,18 +26,17 @@
         columns:
             grid.Columns
             (
+            grid.Column("RowNumber", format: item => rowNum = rowNum + 1),
             grid.Column(columnName: "ID", header: "ID", format: @<text>@item.ID <input type="hidden" name="HiddenID" value="@item.ID" id="HiddenID"  /></text>,style:"SmallCols"),
             
             grid.Column(columnName: "FirstName", header: "First Name", format: @<text><span class="display-mode">@item.FirstName</span>
-            @{ var FirstName = "Students[" + rowNum++ + "].FirstName"; }
-            @Html.TextBox(FirstName, item.FirstName as object, new {@class = "edit-mode", data_val = "true", data_val_required = "First name is required" })
-            @Html.ValidationMessage(FirstName)
+            @Html.TextBoxFor(m => m.Students[rowNum - 1].FirstName, new { @class = "edit-mode" })
+            @Html.ValidationMessageFor(m => m.Students[rowNum - 1].FirstName, "", new { @class = "text-danger" })
             </text>,style:"NameColWidth" ),
 
             grid.Column(columnName: "LastName", header: "Last Name", format: @<text><span class="display-mode">@item.LastName</span>
-            @{ var LastName = "Students[" + rowNum++ + "].LastName"; }
-            @Html.TextBox(LastName, item.LastName as object, new { @class = "edit-mode", data_val = "true", data_val_required = "Last name is required" })
-            @Html.ValidationMessage(LastName)
+            @Html.TextBoxFor(m => m.Students[rowNum - 1].LastName, new { @class = "edit-mode" })
+            @Html.ValidationMessageFor(m => m.Students[rowNum - 1].LastName, "", new { @class = "text-danger" })
             </text>,style:"NameColWidth" ),
 
             @*grid.Column(columnName: "LastName", header: "Last Name", format: @<text><span class="display-mode">@item.LastName</span>@Html.TextBoxFor(x => x.Students[(rowNum + 1)].LastName, new { @class = "edit-mode", id = "txtLastName" })  @Html.ValidationMessageFor(m => m.Students[(rowNum + 1)].LastName, "", new { @class = "text-danger edit-mode" })</text>,style:"NameColWidth"),*@

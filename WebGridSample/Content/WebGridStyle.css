@@ -102,9 +102,16 @@
     }
 
 /* CSS for Hiding first ID column in webgrid */
-/*.webgrid-table thead td:first-child,
+.webgrid-table thead td:first-child,
 .webgrid-table thead th:first-child,
 .webgrid-table tbody td:first-child,
 .webgrid-table tbody th:first-child {
+    display: none;
+}
+
+/*.webgrid-table thead td:nth-child(2),
+.webgrid-table thead th:nth-child(2),
+.webgrid-table tbody td:nth-child(2),
+.webgrid-table tbody th:nth-child(2) {
     display: none;
 }*/
