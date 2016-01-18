@@ -6,12 +6,11 @@
     grid.Bind(Model.Students, autoSortAndPage: false, rowCount: Model.RowCount);
     grid.PageIndex = Model.CurrentPage;
     
-
+    var rowNum = 0;
 }
 
-    @*, ajaxUpdateContainerId: "gridContent", ajaxUpdateCallback: "initScripts"*@
 
-@grid.GetHtml(
+@grid.GetHtml(htmlAttributes: new {id ="StudentGrid"},
         tableStyle: "webgrid-table",
         headerStyle: "webgrid-header",
         footerStyle: "webgrid-footer",
@@ -28,12 +27,31 @@
             grid.Columns
             (
             grid.Column(columnName: "ID", header: "ID", format: @<text>@item.ID <input type="hidden" name="HiddenID" value="@item.ID" id="HiddenID"  /></text>,style:"SmallCols"),
-            grid.Column(columnName: "FirstName", header: "First Name", format: @<text><span class="display-mode">@item.FirstName</span><input type="text" id="txtFirstName" value="@item.FirstName" class="edit-mode" /></text>,style:"NameColWidth" ),
-            grid.Column(columnName: "LastName", header: "Last Name", format: @<text><span class="display-mode">@item.LastName</span><input type="text" id="txtLastName" value="@item.LastName" class="edit-mode" /></text>,style:"NameColWidth"),
+            
+            grid.Column(columnName: "FirstName", header: "First Name", format: @<text><span class="display-mode">@item.FirstName</span>
+            @{ var FirstName = "Students[" + rowNum++ + "].FirstName"; }
+            @Html.TextBox(FirstName, item.FirstName as object, new {@class = "edit-mode", data_val = "true", data_val_required = "First name is required" })
+            @Html.ValidationMessage(FirstName)
+            </text>,style:"NameColWidth" ),
 
-            grid.Column(columnName: "StateName", header: "State Name", format: @<text><span class="display-mode">@item.StateName</span>@Html.DropDownListFor(x => x.SelectedStateId, new SelectList(Model.States, "ID", "Name", Model.SelectedStateId= item.StateID), "-- Select States--", new { id = "cboState", @class = "edit-mode" })</text>,style:"NameColWidth"),
-            grid.Column(columnName: "CityName", header: "City Name", format: @<text><span class="display-mode">@item.CityName</span>@Html.DropDownListFor(x => x.SelectedCityId, new SelectList(Model.Cities.Where(x => x.StateID == item.StateID), "ID", "Name", Model.SelectedCityId = item.CityID), "-- Select City--", new { id = "cboCity", @class = "edit-mode" })
-</text>,style:"NameColWidth"),
+            grid.Column(columnName: "LastName", header: "Last Name", format: @<text><span class="display-mode">@item.LastName</span>
+            @{ var LastName = "Students[" + rowNum++ + "].LastName"; }
+            @Html.TextBox(LastName, item.LastName as object, new { @class = "edit-mode", data_val = "true", data_val_required = "Last name is required" })
+            @Html.ValidationMessage(LastName)
+            </text>,style:"NameColWidth" ),
+
+            @*grid.Column(columnName: "LastName", header: "Last Name", format: @<text><span class="display-mode">@item.LastName</span>@Html.TextBoxFor(x => x.Students[(rowNum + 1)].LastName, new { @class = "edit-mode", id = "txtLastName" })  @Html.ValidationMessageFor(m => m.Students[(rowNum + 1)].LastName, "", new { @class = "text-danger edit-mode" })</text>,style:"NameColWidth"),*@
+
+            grid.Column(columnName: "StateName", header: "State Name", format: @<text><span class="display-mode">@item.StateName</span>
+            @Html.DropDownListFor(x => x.SelectedStateId, new SelectList(Model.States, "ID", "Name", Model.SelectedStateId= item.StateID), "-- Select States--", new { id = "cboState", @class = "edit-mode" }) 
+            @Html.ValidationMessageFor(m => m.SelectedStateId, "", new { @class = "text-danger edit-mode" })</text>,style:"NameColWidth"),
+
+
+            grid.Column(columnName: "CityName", header: "City Name", format: @<text><span class="display-mode">@item.CityName</span>
+            @Html.DropDownListFor(x => x.SelectedCityId, new SelectList(Model.Cities.Where(x => x.StateID == item.StateID), "ID", "Name", Model.SelectedCityId = item.CityID), "-- Select City--", new { id = "cboCity", @class = "edit-mode" }) 
+            @Html.ValidationMessageFor(m => m.SelectedCityId, "", new { @class = "text-danger edit-mode" })
+            </text>,style:"NameColWidth"),
+
             grid.Column(header: "IsActive",
             format: @<text><input id="select" class="box" name="select"
                                   type="checkbox" @(item.IsActive ? "checked='checked'" : "") value="@item.IsActive" /></text>

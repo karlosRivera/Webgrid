@@ -1,0 +1,86 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<input type="submit" value="Read" id="btnRead" />
+<input type="submit" value="Write" id="btnWrite" />
+<input type="submit" value="Remove" id="btnRemove" />
+
+@section scripts{
+
+<script type="text/javascript">
+
+    
+
+    $(document).ready(function () {
+        $("#btnWrite").click(function () {
+            var StudentArray = [];
+            StudentArray.push(PopulateStudent(1, "Tridip", "bhtt"));
+            StudentArray.push(PopulateStudent(2, "Joy", "Das"));
+            alert('array size ' + StudentArray.length);
+            if (typeof (Storage) !== "undefined") {
+                localStorage.setObject('user', StudentArray);
+            }
+            else {
+                alert('local store does not support');
+            }
+            return false;
+        });
+    
+
+    
+        $("#btnRead").click(function () {
+            if (typeof (Storage) !== "undefined") {
+                var StudentArray = [];
+                StudentArray = localStorage.getObject('user');
+                if (StudentArray != null) {
+                    alert('array size ' + StudentArray.length);
+                    for (i = 0; i < StudentArray.length; i++) {
+                        var Student = StudentArray[i];
+                        alert(Student.ID + ' ' + Student.FirstName);
+                    }
+                }
+            }
+            else {
+                alert('local store does not support');
+            }
+
+            return false;
+        });
+
+        $("#btnRemove").click(function () {
+            if (typeof (Storage) !== "undefined") {
+                localStorage.removeItem('user');
+            }
+            else {
+                alert('local store does not support');
+            }
+
+            return false;
+        });
+
+    });
+
+    Storage.prototype.setObject = function (key, value) {
+        this.setItem(key, JSON.stringify(value));
+    }
+
+    Storage.prototype.getObject = function (key) {
+        var value = this.getItem(key);
+        return value && JSON.parse(value);
+    }
+
+
+    function PopulateStudent(id, firstname, lastname) {
+        var Student = new Object();
+        Student.ID = id;
+        Student.FirstName = firstname;
+        Student.LastName = lastname;
+        return Student;
+    }
+</script>
+    }

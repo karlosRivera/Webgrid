@@ -49,6 +49,12 @@ function SetUpPagerUI()
 
 $(document).ready(function () {
     initScripts();
+
+    function IsValid()
+    {
+        var $form = $('form');
+        return $form.valid();
+    }
 });
 
 function initScripts() {
@@ -248,6 +254,11 @@ function SetUpLinks()
 //    UpdateRecord(tableRow);
 //});
 
+function UpdateRecord(tableRow)
+{
+
+}
+
 $(document).on('change', '[id*="cboState"]', function () {
 
     var tableRow = $(this).closest('tr');
@@ -274,11 +285,31 @@ $(document).on('change', '[id*="cboState"]', function () {
     return false;
 });
 
+function HideToolTips(tblRow) {
+    alert('row index ' + tblRow);
+    $('#StudentGrid tbody > tr').each(function (i, row) {
+        if (tblRow < 0) {
+            $(this).find("input[id*='FirstName']").tooltip('hide');
+            $(this).find("input[id*='LastName']").tooltip('hide');
+            $(this).find("select[id*='cboState'] :selected").tooltip('hide');
+            $(this).find("select[id*='cboCity'] :selected").tooltip('hide');
+        }
+        else if (tblRow == i)
+        {
+            $(this).find("input[id*='FirstName']").tooltip('hide');
+            $(this).find("input[id*='LastName']").tooltip('hide');
+            $(this).find("select[id*='cboState'] :selected").tooltip('hide');
+            $(this).find("select[id*='cboCity'] :selected").tooltip('hide');
 
+        }
+    });
+}
 
 $(function () {
     $(document).on('click', '.edit-user', function () {
         var tr = $(this).parents('tr:first');
+        HideToolTips($(tr).index());
+
         $(tr).addClass('Editing');
         if ($(tr).find("td:nth-child(2)").hasClass('PadOn')) {
             $(tr).find("td:nth-child(2)").removeClass("PadOn");
@@ -300,12 +331,14 @@ $(function () {
         //$(tr).find("select[id*='cboCity']").val(cityid);
 
         tr.find('.edit-mode, .display-mode').toggle();
-        $(tr).find("input[id*='txtFirstName']").focus();
+        $(tr).find("input[id*='FirstName']").focus();
         return false;
     });
 
     $(document).on('click', '.cancel-user', function () {
         var tr = $(this).parents('tr:first');
+        HideToolTips($(tr).index());
+
         $(tr).removeClass('Editing');
         if ($(tr).find("td:nth-child(2)").hasClass('PadOff')) {
             $(tr).find("td:nth-child(2)").removeClass("PadOff");
@@ -325,59 +358,60 @@ $(function () {
     });
 
     $(document).on('click', '.save-user', function () {
-        var tr = $(this).parents('tr:first');
+        var $form = $('form');
+        if ($form.valid()) {
+            var tr = $(this).parents('tr:first');
+            HideToolTips($(tr).index());
 
-        var Sortdir = $("#dir").val();
-        var Sortcol = $("#col").val();
-        var page = $("#page").val();
+            var Sortdir = $("#dir").val();
+            var Sortcol = $("#col").val();
+            var page = $("#page").val();
 
-        var ID = tr.find("input[id*='HiddenID']").val();
-        var FirstName = tr.find("input[id*='txtFirstName']").val();
-        var LastName = tr.find("input[id*='txtLastName']").val();
-        var StateID = tr.find("select[id*='cboState'] :selected").val();
-        var StateName = tr.find("select[id*='cboState'] :selected").text();
-        var CityID = tr.find("select[id*='cboCity'] :selected").val();
-        var CityName = tr.find("select[id*='cboCity'] :selected").text();
-        var IsActive = $("[class*='box']").is(':checked');
+            var ID = tr.find("input[id*='HiddenID']").val();
+            var FirstName = tr.find("input[id*='FirstName']").val();
+            var LastName = tr.find("input[id*='LastName']").val();
+            var StateID = tr.find("select[id*='cboState'] :selected").val();
+            var StateName = tr.find("select[id*='cboState'] :selected").text();
+            var CityID = tr.find("select[id*='cboCity'] :selected").val();
+            var CityName = tr.find("select[id*='cboCity'] :selected").text();
+            var IsActive = $("[class*='box']").is(':checked');
 
-        var data = new Object();
-        var StudentArray = [];
-        StudentArray.push(PopulateStudent(ID, FirstName, LastName, StateID, StateName, CityID, CityName, IsActive));
+            var data = new Object();
+            var StudentArray = [];
+            StudentArray.push(PopulateStudent(ID, FirstName, LastName, StateID, StateName, CityID, CityName, IsActive));
 
-        data.page = page;
-        data.sort = Sortcol;
-        data.sortdir = Sortdir;
-        data.Students = StudentArray;
+            data.page = page;
+            data.sort = Sortcol;
+            data.sortdir = Sortdir;
+            data.Students = StudentArray;
 
-        tr.find('.edit-mode, .display-mode').toggle();
-        if ($(tr).find("td:nth-child(2)").hasClass('PadOff')) {
-            $(tr).find("td:nth-child(2)").removeClass("PadOff");
-            $(tr).find("td:nth-child(3)").removeClass("PadOff");
-            $(tr).find("td:nth-child(4)").removeClass("PadOff");
-            $(tr).find("td:nth-child(5)").removeClass("PadOff");
-        }
-
-        $(tr).find("td:nth-child(2)").addClass("PadOn");
-        $(tr).find("td:nth-child(3)").addClass("PadOn");
-        $(tr).find("td:nth-child(4)").addClass("PadOn");
-        $(tr).find("td:nth-child(5)").addClass("PadOn");
-
-        $.ajax({
-            url: updateUrl,
-            data: JSON.stringify({ oSVm: data, 'Action': 'UPDATE' }),
-            type: 'POST',
-            contentType: 'application/json; charset=utf-8',
-            success: function (data) {
-                //alert(data);
-                $('#gridContent').html(data);
-                $("#page").val(page);
-                $("#col").val(Sortcol);
-                $("#dir").val(Sortdir);
-
-                initScripts();
-                //SetUpLinks();
+            tr.find('.edit-mode, .display-mode').toggle();
+            if ($(tr).find("td:nth-child(2)").hasClass('PadOff')) {
+                $(tr).find("td:nth-child(2)").removeClass("PadOff");
+                $(tr).find("td:nth-child(3)").removeClass("PadOff");
+                $(tr).find("td:nth-child(4)").removeClass("PadOff");
+                $(tr).find("td:nth-child(5)").removeClass("PadOff");
             }
-        });
+
+            $(tr).find("td:nth-child(2)").addClass("PadOn");
+            $(tr).find("td:nth-child(3)").addClass("PadOn");
+            $(tr).find("td:nth-child(4)").addClass("PadOn");
+            $(tr).find("td:nth-child(5)").addClass("PadOn");
+
+            $.ajax({
+                url: updateUrl,
+                data: JSON.stringify({ oSVm: data, 'Action': 'UPDATE' }),
+                type: 'POST',
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    $('#gridContent').html(data);
+                    $("#page").val(page);
+                    $("#col").val(Sortcol);
+                    $("#dir").val(Sortdir);
+                    initScripts();
+                }
+            });
+        }
         return false;
     });
 
@@ -439,7 +473,52 @@ $(function () {
     }
 })
 
+$(document).ready(function () {
+    var classes = { groupIdentifier: ".form-group", error: 'has-error', success: null };//success: 'has-success' 
+    function updateClasses(inputElement, toAdd, toRemove) {
+        var group = inputElement.closest(classes.groupIdentifier);
+        if (group.length > 0) {
+            group.addClass(toAdd).removeClass(toRemove);
+        }
+    }
 
+    function onError(inputElement, message) {
+        updateClasses(inputElement, classes.error, classes.success);
+
+        var options = { html: true, placement: 'bottom', title: '<div class="tooltip-alert alert-danger" data-placement="bottom">' + message + '</div>' };
+        $(inputElement).addClass('validation-error');
+        inputElement.tooltip("destroy")
+            .addClass("error")
+            .tooltip(options);
+        inputElement.tooltip("show");
+        inputElement.addClass('HasErr');
+    }
+
+    function onSuccess(inputElement) {
+        updateClasses(inputElement, classes.success, classes.error);
+        inputElement.tooltip("destroy");
+        $(inputElement).removeClass('validation-error');
+        inputElement.tooltip("hide");
+        inputElement.removeClass('HasErr');
+    }
+
+    function onValidated(errorMap, errorList) {
+        $.each(errorList, function () {
+            onError($(this.element), this.message);
+        });
+
+        if (this.settings.success) {
+            $.each(this.successList, function () {
+                onSuccess($(this));
+            });
+        }
+    }
+
+    $('form').each(function () {
+        var validator = $(this).data('validator');
+        validator.settings.showErrors = onValidated;
+    });
+});
 
 function getUrlVars(url) {
     var vars = [], hash;

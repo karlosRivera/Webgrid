@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Data;
 using System.Data.SqlClient;
+using System.ComponentModel.DataAnnotations;
 
 namespace WebGridSample.Models
 {
@@ -125,9 +126,11 @@ namespace WebGridSample.Models
 
         public IList<Student> Students { get; set; }
 
+        [Required(ErrorMessage = "State Required")]
         public int SelectedStateId { set; get; }
         public IList<State> States { get; set; }
 
+        [Required(ErrorMessage = "City Required")]
         public int SelectedCityId { set; get; }
         public IList<City> Cities { get; set; }
 

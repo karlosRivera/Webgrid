@@ -81,6 +81,27 @@
         margin-top:15px;
         margin-right: 14px;
     }
+
+.validation-error
+{
+    background: #FEF1EC;
+    border: 1px solid #CD0A0A;
+}
+
+.tooltip-inner {
+    max-width: 300px;
+    padding: 0;
+    border: solid 1px #ccc;
+    background-color: #f00;
+}
+.tooltip-alert{
+    padding: 8px 10px;
+    font-weight: bolder;
+    color: white;
+    background-color: #f00;
+} 
+
+.tooltip-arrow { border-bottom-color:black; }
 </style>
 
 <h2>Grid with partial view & style pager</h2>
@@ -103,7 +124,8 @@
 }
 
 @section scripts{
-<script src="~/Scripts/Personal/GridHandlder2.js"></script>
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/Personal/GridHandlder2.js"></script>
 
 }
 
