@@ -109,6 +109,10 @@
     display: none;
 }
 
+.webgrid-table thead th:nth-child(8)
+{
+    text-align:center;
+}
 /*.webgrid-table thead td:nth-child(2),
 .webgrid-table thead th:nth-child(2),
 .webgrid-table tbody td:nth-child(2),

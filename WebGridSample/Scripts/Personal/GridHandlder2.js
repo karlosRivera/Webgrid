@@ -3,6 +3,7 @@ var _sortdir;
 var _page;
 var _sortCol;
 var header;
+var Students = [];
 
 function SetUpPagerUI()
 {
@@ -49,12 +50,6 @@ function SetUpPagerUI()
 
 $(document).ready(function () {
     initScripts();
-
-    function IsValid()
-    {
-        var $form = $('form');
-        return $form.valid();
-    }
 });
 
 function initScripts() {
@@ -91,8 +86,6 @@ function SetPagerNavImage() {
 
     });
 }
-
-
 
 function SetUpNavQueryString() {
     /*
@@ -161,29 +154,34 @@ function SetSortArrows() {
 }
 
 $(document).on('click', '.webgrid-header a', function () {
-    params = getUrlVars($(this).attr('href'));
-    _sort = params["sort"];
-    _sortdir = params["sortdir"];
-    _page = params["page"];
-    _sortCol = $("#col").val();
+    var $form = $('form');
+    if ($form.valid()) {
+        params = getUrlVars($(this).attr('href'));
+        _sort = params["sort"];
+        _sortdir = params["sortdir"];
+        _page = params["page"];
+        _sortCol = $("#col").val();
 
-    $("#page").val(_page);
-    $("#dir").val(_sortdir)
+        $("#page").val(_page);
+        $("#dir").val(_sortdir)
 
-    if (_sort != $("#col").val())
-    {
-        $("#dir").val('ASC');
+        if (_sort != $("#col").val()) {
+            $("#dir").val('ASC');
+        }
+        $("#col").val(_sort);
+
+        RefreshGrid();
     }
-    $("#col").val(_sort);
-
-    RefreshGrid();
     return false;
 });
 
 $(document).on('click', '.webgrid-footer a', function () {
-    params = getUrlVars($(this).attr('href'));
-    $("#page").val(params["page"]);
-    RefreshGrid();
+    var $form = $('form');
+    if ($form.valid()) {
+        params = getUrlVars($(this).attr('href'));
+        $("#page").val(params["page"]);
+        RefreshGrid();
+    }
     return false;
 });
 
@@ -232,37 +230,100 @@ function SetUpLinks()
     });
 
 }
-//jQuery(document).on('blur', ".webgrid-table input[type=text]", function ()
-//{
-//    alert('textbox blur');
-//    var tableRow = $(this).closest('tr');
-//    UpdateRecord(tableRow);
-//});
-
-
-//$(document).on('change', '[id*="cboCity"]', function () {
-//    alert('cboCity click');
-
-//    var tableRow = $(this).closest('tr');
-//    UpdateRecord(tableRow);
-//});
-
-//$(document).on('click', '[id*="select"]', function () {
-//    alert('checkbox click');
-
-//    var tableRow = $(this).closest('tr');
-//    UpdateRecord(tableRow);
-//});
-
-function UpdateRecord(tableRow)
+jQuery(document).on('blur', ".webgrid-table input[type=text]", function ()
 {
+    var tableRow = $(this).closest('tr');
+    saveToLocalStore(tableRow);
+});
 
+
+$(document).on('change', '[id*="cboCity"]', function () {
+    var tableRow = $(this).closest('tr');
+    saveToLocalStore(tableRow);
+});
+
+$(document).on('click', '[id*="select"]', function () {
+    var tableRow = $(this).closest('tr');
+    saveToLocalStore(tableRow);
+});
+
+function saveToLocalStore(tableRow) {
+
+    var ID = tableRow.find("input[id*='HiddenID']").val();
+    var FirstName = tableRow.find("input[id*='FirstName']").val();
+    var LastName = tableRow.find("input[id*='LastName']").val();
+    var StateID = tableRow.find("select[id*='cboState'] :selected").val();
+    var StateName = tableRow.find("select[id*='cboState'] :selected").text();
+    var CityID = tableRow.find("select[id*='cboCity'] :selected").val();
+    var CityName = tableRow.find("select[id*='cboCity'] :selected").text();
+    var IsActive = ($("[class*='box']").is(':checked') ? 1 : 0);
+
+    var index = IndexOfArrayByKeyValue(Students, "ID", ID);
+    if (index == null) {
+        Students.push(PopulateStudent(ID, FirstName, LastName, StateID, StateName, CityID, CityName, IsActive));
+    }
+    else {
+        Students[index].ID = ID;
+        Students[index].FirstName = FirstName;
+        Students[index].LastName = LastName;
+        Students[index].StateID = StateID;
+        Students[index].StateName = StateName;
+        Students[index].CityID = CityID;
+        Students[index].CityName = CityName;
+        Students[index].IsActive = IsActive;
+    }
+
+    if (typeof (Storage) !== "undefined") {
+        localStorage.setObject('Students', Students);
+    }
+    else {
+        alert('local store does not support');
+    }
+
+    Show();
+}
+
+function Show() {
+    var theTable = document.createElement('table');
+    Students = localStorage.getObject('Students');
+
+    if (Students != null) {
+        for (var i = 0, tr, td; i < Students.length; i++) {
+            tr = document.createElement('tr');
+            td = document.createElement('td');
+            td.appendChild(document.createTextNode(Students[i].ID + '\u00A0\u00A0\u00A0'));
+            tr.appendChild(td);
+
+            td = document.createElement('td');
+            td.appendChild(document.createTextNode(Students[i].FirstName + '\u00A0\u00A0\u00A0'));
+            tr.appendChild(td);
+
+            td = document.createElement('td');
+            td.appendChild(document.createTextNode(Students[i].LastName + '\u00A0\u00A0\u00A0'));
+            tr.appendChild(td);
+
+            td = document.createElement('td');
+            td.appendChild(document.createTextNode(Students[i].StateName + '\u00A0\u00A0\u00A0'));
+            tr.appendChild(td);
+
+            td = document.createElement('td');
+            td.appendChild(document.createTextNode(Students[i].CityName + '\u00A0\u00A0\u00A0'));
+            tr.appendChild(td);
+
+            td = document.createElement('td');
+            td.appendChild(document.createTextNode(Students[i].IsActive + '\u00A0\u00A0\u00A0'));
+            tr.appendChild(td);
+
+            theTable.appendChild(tr);
+        }
+    }
+    $("#Displaytable").html(theTable);
 }
 
 $(document).on('change', '[id*="cboState"]', function () {
 
     var tableRow = $(this).closest('tr');
-    UpdateRecord(tableRow);
+    saveToLocalStore(tableRow);
 
     var cboCity = $(this).closest('tr').find("select[id*='cboCity']");
 
@@ -286,21 +347,22 @@ $(document).on('change', '[id*="cboState"]', function () {
 });
 
 function HideToolTips(tblRow) {
-    $('#StudentGrid tbody > tr').each(function (i, row) {
-        if (tblRow < 0) {
-            $(this).find("input[id*='FirstName']").tooltip('hide');
-            $(this).find("input[id*='LastName']").tooltip('hide');
-            $(this).find("select[id*='cboState'] :selected").tooltip('hide');
-            $(this).find("select[id*='cboCity'] :selected").tooltip('hide');
-        }
-        else if (tblRow == i)
-        {
-            $(this).find("input[id*='FirstName']").tooltip('hide');
-            $(this).find("input[id*='LastName']").tooltip('hide');
-            $(this).find("select[id*='cboState'] :selected").tooltip('hide');
-            $(this).find("select[id*='cboCity'] :selected").tooltip('hide');
+    $(document).ready(function () {
+        $('#StudentGrid > tbody  > tr').each(function (i, row) {
+            if (tblRow < 0) {
+                $(this).find("input[id*='FirstName']").tooltip('hide');
+                $(this).find("input[id*='LastName']").tooltip('hide');
+                $(this).find("select[id*='cboState']").tooltip('hide');
+                $(this).find("select[id*='cboCity']").tooltip('hide');
+            }
+            else if (tblRow == i) {
+                $(this).find("input[id*='FirstName']").tooltip('hide');
+                $(this).find("input[id*='LastName']").tooltip('hide');
+                $(this).find("select[id*='cboState']").tooltip('hide');
+                $(this).find("select[id*='cboCity']").tooltip('hide');
 
-        }
+            }
+        });
     });
 }
 
@@ -308,9 +370,11 @@ $(function () {
     $(document).on('click', '.edit-user', function () {
         var tr = $(this).parents('tr:first');
         HideToolTips($(tr).index());
+        saveToLocalStore(tr);
 
         $(tr).addClass('Editing');
         if ($(tr).find("td:nth-child(2)").hasClass('PadOn')) {
+            $(tr).find("td:nth-child(1)").removeClass("PadOn");
             $(tr).find("td:nth-child(2)").removeClass("PadOn");
             $(tr).find("td:nth-child(3)").removeClass("PadOn");
             $(tr).find("td:nth-child(4)").removeClass("PadOn");
@@ -318,10 +382,12 @@ $(function () {
 
         }
 
-        $(tr).find("td:nth-child(2)").addClass("PadOff");
+        $(tr).find("td:nth-child(1)").addClass("PadOn");
+        $(tr).find("td:nth-child(2)").addClass("PadOn");
         $(tr).find("td:nth-child(3)").addClass("PadOff");
         $(tr).find("td:nth-child(4)").addClass("PadOff");
         $(tr).find("td:nth-child(5)").addClass("PadOff");
+        $(tr).find("td:nth-child(6)").addClass("PadOff");
 
         // fetching dropdown selected value
         //var stateid = $(tr).find("input[id*='HiddenStateID']").val();
@@ -337,21 +403,27 @@ $(function () {
     $(document).on('click', '.cancel-user', function () {
         var tr = $(this).parents('tr:first');
         HideToolTips($(tr).index());
+        saveToLocalStore(tr);
 
         $(tr).removeClass('Editing');
-        if ($(tr).find("td:nth-child(2)").hasClass('PadOff')) {
+        
+        if ($(tr).find("td:nth-child(3)").hasClass('PadOff')) {
+            $(tr).find("td:nth-child(1)").removeClass("PadOff");
             $(tr).find("td:nth-child(2)").removeClass("PadOff");
             $(tr).find("td:nth-child(3)").removeClass("PadOff");
             $(tr).find("td:nth-child(4)").removeClass("PadOff");
             $(tr).find("td:nth-child(5)").removeClass("PadOff");
-
+            $(tr).find("td:nth-child(6)").removeClass("PadOff");
         }
 
+        $(tr).find("td:nth-child(1)").addClass("PadOn");
         $(tr).find("td:nth-child(2)").addClass("PadOn");
         $(tr).find("td:nth-child(3)").addClass("PadOn");
         $(tr).find("td:nth-child(4)").addClass("PadOn");
         $(tr).find("td:nth-child(5)").addClass("PadOn");
+        $(tr).find("td:nth-child(6)").addClass("PadOn");
 
+        //********
         tr.find('.edit-mode, .display-mode').toggle();
         return false;
     });
@@ -361,6 +433,7 @@ $(function () {
         if ($form.valid()) {
             var tr = $(this).parents('tr:first');
             HideToolTips($(tr).index());
+            saveToLocalStore(tr);
 
             var Sortdir = $("#dir").val();
             var Sortcol = $("#col").val();
@@ -385,17 +458,19 @@ $(function () {
             data.Students = StudentArray;
 
             tr.find('.edit-mode, .display-mode').toggle();
-            if ($(tr).find("td:nth-child(2)").hasClass('PadOff')) {
+            if ($(tr).find("td:nth-child(3)").hasClass('PadOff')) {
                 $(tr).find("td:nth-child(2)").removeClass("PadOff");
                 $(tr).find("td:nth-child(3)").removeClass("PadOff");
                 $(tr).find("td:nth-child(4)").removeClass("PadOff");
                 $(tr).find("td:nth-child(5)").removeClass("PadOff");
+                $(tr).find("td:nth-child(6)").removeClass("PadOff");
             }
 
             $(tr).find("td:nth-child(2)").addClass("PadOn");
             $(tr).find("td:nth-child(3)").addClass("PadOn");
             $(tr).find("td:nth-child(4)").addClass("PadOn");
             $(tr).find("td:nth-child(5)").addClass("PadOn");
+            $(tr).find("td:nth-child(6)").addClass("PadOn");
 
             $.ajax({
                 url: updateUrl,
@@ -458,19 +533,10 @@ $(function () {
     });
 
 
-    function PopulateStudent(id, firstname, lastname, stateid, statename, cityid, cityname, isactive) {
-        var Student = new Object();
-        Student.ID = id;
-        Student.FirstName = firstname;
-        Student.LastName = lastname;
-        Student.IsActive = isactive;
-        Student.StateID = stateid;
-        Student.StateName = statename;
-        Student.CityID = cityid;
-        Student.CityName = cityname;
-        return Student;
-    }
+
 })
+
+
 
 $(document).ready(function () {
     var classes = { groupIdentifier: ".form-group", error: 'has-error', success: null };//success: 'has-success' 
@@ -531,4 +597,45 @@ function getUrlVars(url) {
         vars = [];
     }
     return vars;
+}
+
+function findArrayByKeyValue(arraytosearch, key, valuetosearch) {
+    var Person = [];
+    for (var i = 0; i < arraytosearch.length; i++) {
+        if (arraytosearch[i][key] == valuetosearch) {
+            Person = arraytosearch[i];
+        }
+    }
+    return Person;
+}
+
+function IndexOfArrayByKeyValue(arraytosearch, key, valuetosearch) {
+    for (var i = 0; i < arraytosearch.length; i++) {
+        if (arraytosearch[i][key] == valuetosearch) {
+            return i;
+        }
+    }
+    return null;
+}
+
+function PopulateStudent(id, firstname, lastname, stateid, statename, cityid, cityname, isactive) {
+    var Student = new Object();
+    Student.ID = id;
+    Student.FirstName = firstname;
+    Student.LastName = lastname;
+    Student.IsActive = isactive;
+    Student.StateID = stateid;
+    Student.StateName = statename;
+    Student.CityID = cityid;
+    Student.CityName = cityname;
+    return Student;
+}
+
+Storage.prototype.setObject = function (key, value) {
+    this.setItem(key, JSON.stringify(value));
+}
+
+Storage.prototype.getObject = function (key) {
+    var value = this.getItem(key);
+    return value && JSON.parse(value);
 }
