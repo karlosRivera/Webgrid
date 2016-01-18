@@ -30,11 +30,13 @@
             grid.Column(columnName: "ID", header: "ID", format: @<text>@item.ID <input type="hidden" name="HiddenID" value="@item.ID" id="HiddenID"  /></text>,style:"SmallCols"),
             
             grid.Column(columnName: "FirstName", header: "First Name", format: @<text><span class="display-mode">@item.FirstName</span>
+            <input type="hidden" name="HiddenFirstName" value="@item.FirstName" id="HiddenFirstName" />
             @Html.TextBoxFor(m => m.Students[rowNum - 1].FirstName, new { @class = "edit-mode" })
             @Html.ValidationMessageFor(m => m.Students[rowNum - 1].FirstName, "", new { @class = "text-danger" })
             </text>,style:"NameColWidth" ),
 
             grid.Column(columnName: "LastName", header: "Last Name", format: @<text><span class="display-mode">@item.LastName</span>
+            <input type="hidden" name="HiddenLastName" value="@item.LastName" id="HiddenLastName" />
             @Html.TextBoxFor(m => m.Students[rowNum - 1].LastName, new { @class = "edit-mode" })
             @Html.ValidationMessageFor(m => m.Students[rowNum - 1].LastName, "", new { @class = "text-danger" })
             </text>,style:"NameColWidth" ),
@@ -42,11 +44,13 @@
             @*grid.Column(columnName: "LastName", header: "Last Name", format: @<text><span class="display-mode">@item.LastName</span>@Html.TextBoxFor(x => x.Students[(rowNum + 1)].LastName, new { @class = "edit-mode", id = "txtLastName" })  @Html.ValidationMessageFor(m => m.Students[(rowNum + 1)].LastName, "", new { @class = "text-danger edit-mode" })</text>,style:"NameColWidth"),*@
 
             grid.Column(columnName: "StateName", header: "State Name", format: @<text><span class="display-mode">@item.StateName</span>
+            <input type="hidden" name="HiddenStateID" value="@item.StateID" id="HiddenStateID" />
             @Html.DropDownListFor(x => x.SelectedStateId, new SelectList(Model.States, "ID", "Name", Model.SelectedStateId= item.StateID), "-- Select States--", new { id = "cboState", @class = "edit-mode" }) 
             @Html.ValidationMessageFor(m => m.SelectedStateId, "", new { @class = "text-danger edit-mode" })</text>,style:"NameColWidth"),
 
 
             grid.Column(columnName: "CityName", header: "City Name", format: @<text><span class="display-mode">@item.CityName</span>
+            <input type="hidden" name="HiddenCityID" value="@item.CityID" id="HiddenCityID" />
             @Html.DropDownListFor(x => x.SelectedCityId, new SelectList(Model.Cities.Where(x => x.StateID == item.StateID), "ID", "Name", Model.SelectedCityId = item.CityID), "-- Select City--", new { id = "cboCity", @class = "edit-mode" }) 
             @Html.ValidationMessageFor(m => m.SelectedCityId, "", new { @class = "text-danger edit-mode" })
             </text>,style:"NameColWidth"),

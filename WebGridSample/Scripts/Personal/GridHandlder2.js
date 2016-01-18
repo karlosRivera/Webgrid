@@ -236,6 +236,10 @@ jQuery(document).on('blur', ".webgrid-table input[type=text]", function ()
     saveToLocalStore(tableRow);
 });
 
+jQuery(document).on('keyup', '.webgrid-table input[type=text]', function (ev) {
+    var tableRow = $(this).closest('tr');
+    saveToLocalStore(tableRow);
+});
 
 $(document).on('change', '[id*="cboCity"]', function () {
     var tableRow = $(this).closest('tr');
@@ -403,6 +407,18 @@ $(function () {
     $(document).on('click', '.cancel-user', function () {
         var tr = $(this).parents('tr:first');
         HideToolTips($(tr).index());
+
+        // set dropdown selected value after cancel
+        var FirstName = $(tr).find("input[id*='HiddenFirstName']").val();
+        var LastName = $(tr).find("input[id*='HiddenLastName']").val();
+        var stateid = $(tr).find("input[id*='HiddenStateID']").val();
+        var cityid = $(tr).find("input[id*='HiddenCityID']").val();
+
+        $(tr).find("input[id*='FirstName']").val(FirstName);
+        $(tr).find("input[id*='LastName']").val(LastName);
+        $(tr).find("select[id*='cboState']").val(stateid);
+        $(tr).find("select[id*='cboCity']").val(cityid);
+
         saveToLocalStore(tr);
 
         $(tr).removeClass('Editing');
