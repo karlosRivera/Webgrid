@@ -232,14 +232,11 @@ function SetUpLinks()
 }
 jQuery(document).on('blur', ".webgrid-table input[type=text]", function ()
 {
+    $(this).val($(this).val());
     var tableRow = $(this).closest('tr');
     saveToLocalStore(tableRow);
 });
 
-jQuery(document).on('keyup', '.webgrid-table input[type=text]', function (ev) {
-    var tableRow = $(this).closest('tr');
-    saveToLocalStore(tableRow);
-});
 
 $(document).on('change', '[id*="cboCity"]', function () {
     var tableRow = $(this).closest('tr');
@@ -258,11 +255,16 @@ $(document).ready(function () {
     });
 })
 
+jQuery(document).on('keyup', '.webgrid-table input[type=text]', function (ev) {
+    var tableRow = $(this).closest('tr');
+    saveToLocalStore(tableRow);
+});
+
 function saveToLocalStore(tableRow) {
 
     var ID = tableRow.find("input[id*='HiddenID']").val();
-    var FirstName = tableRow.find("input[id*='FirstName']").val();
-    var LastName = tableRow.find("input[id*='LastName']").val();
+    var FirstName = tableRow.find("input[type='text'][id*='FirstName']").val();
+    var LastName = tableRow.find("input[type='text'][id*='LastName']").val();
     var StateID = tableRow.find("select[id*='cboState'] :selected").val();
     var StateName = tableRow.find("select[id*='cboState'] :selected").text();
     var CityID = tableRow.find("select[id*='cboCity'] :selected").val();
@@ -390,7 +392,6 @@ $(function () {
             $(tr).find("td:nth-child(3)").removeClass("PadOn");
             $(tr).find("td:nth-child(4)").removeClass("PadOn");
             $(tr).find("td:nth-child(5)").removeClass("PadOn");
-
         }
 
         $(tr).find("td:nth-child(1)").addClass("PadOn");
@@ -399,12 +400,6 @@ $(function () {
         $(tr).find("td:nth-child(4)").addClass("PadOff");
         $(tr).find("td:nth-child(5)").addClass("PadOff");
         $(tr).find("td:nth-child(6)").addClass("PadOff");
-
-        // fetching dropdown selected value
-        //var stateid = $(tr).find("input[id*='HiddenStateID']").val();
-        //var cityid = $(tr).find("input[id*='HiddenCityID']").val();
-        //$(tr).find("select[id*='cboState']").val(stateid);
-        //$(tr).find("select[id*='cboCity']").val(cityid);
 
         tr.find('.edit-mode, .display-mode').toggle();
         $(tr).find("input[id*='FirstName']").focus();
@@ -416,15 +411,15 @@ $(function () {
         HideToolTips($(tr).index());
 
         // set dropdown selected value after cancel
-        var FirstName = $(tr).find("input[id*='HiddenFirstName']").val();
-        var LastName = $(tr).find("input[id*='HiddenLastName']").val();
-        var stateid = $(tr).find("input[id*='HiddenStateID']").val();
-        var cityid = $(tr).find("input[id*='HiddenCityID']").val();
+        //var FirstName = $(tr).find("input[id*='HiddenFirstName']").val();
+        //var LastName = $(tr).find("input[id*='HiddenLastName']").val();
+        //var stateid = $(tr).find("input[id*='HiddenStateID']").val();
+        //var cityid = $(tr).find("input[id*='HiddenCityID']").val();
 
-        $(tr).find("input[id*='FirstName']").val(FirstName);
-        $(tr).find("input[id*='LastName']").val(LastName);
-        $(tr).find("select[id*='cboState']").val(stateid);
-        $(tr).find("select[id*='cboCity']").val(cityid);
+        //$(tr).find("input[id*='FirstName']").val(FirstName);
+        //$(tr).find("input[id*='LastName']").val(LastName);
+        //$(tr).find("select[id*='cboState']").val(stateid);
+        //$(tr).find("select[id*='cboCity']").val(cityid);
 
         saveToLocalStore(tr);
 
@@ -455,16 +450,16 @@ $(function () {
         var $form = $('form');
         if ($form.valid()) {
             var tr = $(this).parents('tr:first');
-            HideToolTips($(tr).index());
-            saveToLocalStore(tr);
+            //HideToolTips($(tr).index());
+            //saveToLocalStore(tr);
 
             var Sortdir = $("#dir").val();
             var Sortcol = $("#col").val();
             var page = $("#page").val();
 
             var ID = tr.find("input[id*='HiddenID']").val();
-            var FirstName = tr.find("input[id*='FirstName']").val();
-            var LastName = tr.find("input[id*='LastName']").val();
+            var FirstName = tr.find("input[type='text'][id*='FirstName']").val();
+            var LastName = tr.find("input[type='text'][id*='LastName']").val();
             var StateID = tr.find("select[id*='cboState'] :selected").val();
             var StateName = tr.find("select[id*='cboState'] :selected").text();
             var CityID = tr.find("select[id*='cboCity'] :selected").val();
