@@ -171,6 +171,7 @@ $(document).on('click', '.webgrid-header a', function () {
         $("#col").val(_sort);
 
         RefreshGrid();
+
     }
     return false;
 });
@@ -206,7 +207,7 @@ function RefreshGrid() {
             $("#col").val(Sortcol);
             $("#dir").val(Sortdir);
             initScripts();
-            //SetUpLinks();
+            setEditableRow();
         }
     });
 }
@@ -234,18 +235,18 @@ jQuery(document).on('blur', ".webgrid-table input[type=text]", function ()
 {
     $(this).val($(this).val());
     var tableRow = $(this).closest('tr');
-    saveToLocalStore(tableRow);
+    handleLocalStore(tableRow,'UPDATE');
 });
 
 
 $(document).on('change', '[id*="cboCity"]', function () {
     var tableRow = $(this).closest('tr');
-    saveToLocalStore(tableRow);
+    handleLocalStore(tableRow,'UPDATE');
 });
 
 $(document).on('click', '[id*="select"]', function () {
     var tableRow = $(this).closest('tr');
-    saveToLocalStore(tableRow);
+    handleLocalStore(tableRow,'UPDATE');
 });
 
 $(document).ready(function () {
@@ -257,10 +258,22 @@ $(document).ready(function () {
 
 jQuery(document).on('keyup', '.webgrid-table input[type=text]', function (ev) {
     var tableRow = $(this).closest('tr');
-    saveToLocalStore(tableRow);
+    handleLocalStore(tableRow,'UPDATE');
 });
 
-function saveToLocalStore(tableRow) {
+function setEditableRow()
+{
+    $("#StudentGrid > tbody  > tr").each(function () {
+        var tr = $(this).closest('tr');
+        var ID = tr.find("input[id*='HiddenID']").val();
+        var index = IndexOfArrayByKeyValue(Students, "ID", ID);
+        if (index != null) {
+            tr.find("[id*='btnEdit']").click();
+        }
+    });
+}
+
+function handleLocalStore(tableRow,action) {
 
     var ID = tableRow.find("input[id*='HiddenID']").val();
     var FirstName = tableRow.find("input[type='text'][id*='FirstName']").val();
@@ -272,18 +285,25 @@ function saveToLocalStore(tableRow) {
     var IsActive = ($("[class*='box']").is(':checked') ? 1 : 0);
 
     var index = IndexOfArrayByKeyValue(Students, "ID", ID);
-    if (index == null) {
-        Students.push(PopulateStudent(ID, FirstName, LastName, StateID, StateName, CityID, CityName, IsActive));
+    if (action.toUpperCase() == 'UPDATE') {
+        if (index == null) {
+            Students.push(PopulateStudent(ID, FirstName, LastName, StateID, StateName, CityID, CityName, IsActive));
+        }
+        else {
+            Students[index].ID = ID;
+            Students[index].FirstName = FirstName;
+            Students[index].LastName = LastName;
+            Students[index].StateID = StateID;
+            Students[index].StateName = StateName;
+            Students[index].CityID = CityID;
+            Students[index].CityName = CityName;
+            Students[index].IsActive = IsActive;
+        }
     }
-    else {
-        Students[index].ID = ID;
-        Students[index].FirstName = FirstName;
-        Students[index].LastName = LastName;
-        Students[index].StateID = StateID;
-        Students[index].StateName = StateName;
-        Students[index].CityID = CityID;
-        Students[index].CityName = CityName;
-        Students[index].IsActive = IsActive;
+    else if (action.toUpperCase() == 'DELETE') {
+        if (index != null) {
+            Students.splice(index, 1);
+        }
     }
 
     if (typeof (Storage) !== "undefined") {
@@ -336,7 +356,6 @@ function Show() {
 $(document).on('change', '[id*="cboState"]', function () {
 
     var tableRow = $(this).closest('tr');
-    saveToLocalStore(tableRow);
 
     var cboCity = $(this).closest('tr').find("select[id*='cboCity']");
 
@@ -353,6 +372,7 @@ $(document).on('change', '[id*="cboState"]', function () {
                             $('<option></option>').val(item.ID).html(item.Name)
                         );
                 });
+                handleLocalStore(tableRow, 'UPDATE');
             }
         });
     }
@@ -363,14 +383,14 @@ function HideToolTips(tblRow) {
     $(document).ready(function () {
         $('#StudentGrid > tbody  > tr').each(function (i, row) {
             if (tblRow < 0) {
-                $(this).find("input[id*='FirstName']").tooltip('hide');
-                $(this).find("input[id*='LastName']").tooltip('hide');
+                $(this).find("input[type='text'][id*='FirstName']").tooltip('hide');
+                $(this).find("input[type='text'][id*='LastName']").tooltip('hide');
                 $(this).find("select[id*='cboState']").tooltip('hide');
                 $(this).find("select[id*='cboCity']").tooltip('hide');
             }
             else if (tblRow == i) {
-                $(this).find("input[id*='FirstName']").tooltip('hide');
-                $(this).find("input[id*='LastName']").tooltip('hide');
+                $(this).find("input[type='text'][id*='FirstName']").tooltip('hide');
+                $(this).find("input[type='text'][id*='LastName']").tooltip('hide');
                 $(this).find("select[id*='cboState']").tooltip('hide');
                 $(this).find("select[id*='cboCity']").tooltip('hide');
 
@@ -383,7 +403,7 @@ $(function () {
     $(document).on('click', '.edit-user', function () {
         var tr = $(this).parents('tr:first');
         HideToolTips($(tr).index());
-        saveToLocalStore(tr);
+        handleLocalStore(tr, 'UPDATE');
 
         $(tr).addClass('Editing');
         if ($(tr).find("td:nth-child(2)").hasClass('PadOn')) {
@@ -402,26 +422,24 @@ $(function () {
         $(tr).find("td:nth-child(6)").addClass("PadOff");
 
         tr.find('.edit-mode, .display-mode').toggle();
-        $(tr).find("input[id*='FirstName']").focus();
+        $(tr).find("input[type='text'][id*='FirstName']").focus();
         return false;
     });
 
     $(document).on('click', '.cancel-user', function () {
         var tr = $(this).parents('tr:first');
         HideToolTips($(tr).index());
-
+        handleLocalStore(tr, 'DELETE');
         // set dropdown selected value after cancel
-        //var FirstName = $(tr).find("input[id*='HiddenFirstName']").val();
-        //var LastName = $(tr).find("input[id*='HiddenLastName']").val();
-        //var stateid = $(tr).find("input[id*='HiddenStateID']").val();
-        //var cityid = $(tr).find("input[id*='HiddenCityID']").val();
+        var FirstName = $(tr).find("input[id*='HiddenFirstName']").val();
+        var LastName = $(tr).find("input[id*='HiddenLastName']").val();
+        var stateid = $(tr).find("input[id*='HiddenStateID']").val();
+        var cityid = $(tr).find("input[id*='HiddenCityID']").val();
 
-        //$(tr).find("input[id*='FirstName']").val(FirstName);
-        //$(tr).find("input[id*='LastName']").val(LastName);
-        //$(tr).find("select[id*='cboState']").val(stateid);
-        //$(tr).find("select[id*='cboCity']").val(cityid);
-
-        saveToLocalStore(tr);
+        $(tr).find("input[type='text'][id*='FirstName']").val(FirstName);
+        $(tr).find("input[type='text'][id*='LastName']").val(LastName);
+        $(tr).find("select[id*='cboState']").val(stateid);
+        $(tr).find("select[id*='cboCity']").val(cityid);
 
         $(tr).removeClass('Editing');
         
@@ -450,8 +468,7 @@ $(function () {
         var $form = $('form');
         if ($form.valid()) {
             var tr = $(this).parents('tr:first');
-            //HideToolTips($(tr).index());
-            //saveToLocalStore(tr);
+            HideToolTips($(tr).index());
 
             var Sortdir = $("#dir").val();
             var Sortcol = $("#col").val();
@@ -500,6 +517,7 @@ $(function () {
                     $("#page").val(page);
                     $("#col").val(Sortcol);
                     $("#dir").val(Sortdir);
+                    handleLocalStore(tr, 'DELETE');
                     initScripts();
                 }
             });
@@ -544,17 +562,13 @@ $(function () {
                     $("#dir").val(Sortdir);
 
                     initScripts();
+                    handleLocalStore(tr, 'DELETE');
                 }
             });
         }
         return false;
     });
-
-
-
 })
-
-
 
 $(document).ready(function () {
     var classes = { groupIdentifier: ".form-group", error: 'has-error', success: null };//success: 'has-success' 
@@ -628,9 +642,11 @@ function findArrayByKeyValue(arraytosearch, key, valuetosearch) {
 }
 
 function IndexOfArrayByKeyValue(arraytosearch, key, valuetosearch) {
-    for (var i = 0; i < arraytosearch.length; i++) {
-        if (arraytosearch[i][key] == valuetosearch) {
-            return i;
+    if (arraytosearch != null) {
+        for (var i = 0; i < arraytosearch.length; i++) {
+            if (arraytosearch[i][key] == valuetosearch) {
+                return i;
+            }
         }
     }
     return null;
