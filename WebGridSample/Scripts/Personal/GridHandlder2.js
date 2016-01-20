@@ -6,6 +6,9 @@ var header;
 var Students = [];
 var _newRow = 0;
 
+//SetUpPagerUI function will restryle grid pager html.
+//this function will add ol,li inside pager html and add some 
+// css class to make pager look good.
 function SetUpPagerUI()
 {
     var firstRecord=$('#firstRecord').val();
@@ -46,6 +49,7 @@ function SetUpPagerUI()
 }
 
 $(document).ready(function () {
+    //initScripts will fire some function after DOM load
     initScripts();
 });
 
@@ -94,7 +98,7 @@ function SetUpNavQueryString() {
     });
 
     /*
-        modify href of anchor to add page no to persist it in table footer
+        modify href of anchor to add sort col & sort direction to persist it in table footer
     */
     $(".webgrid-footer a").each(function () {
         var res = this.href.split("&");
@@ -108,7 +112,6 @@ function SetUpNavQueryString() {
             }
 
             this.href = this.href + '&sort=' + $('#col').val() + '&sortdir=' + ColOrder;
-            //this.href = this.href.replace('UpdateStudents', 'List')
         }
     });
 
@@ -120,19 +123,24 @@ function SetUpNavQueryString() {
     });
 }
 
+//ajaxStart function will fire when ajax call start
 $(document).ajaxStart(function () {
+    // showing busy icon
     $('#loader').show();
 });
 
+//ajaxComplete function will fire when ajax call complete
 $(document).ajaxComplete(function () {
+    // hiding busy icon
     $('#loader').hide();
 })
 
-function toggleLoader()
-{
-    $('#loader').toggle();
-}
+//function toggleLoader()
+//{
+//    $('#loader').toggle();
+//}
 
+//SetSortArrows function set sort up/down arrow on grid header column
 function SetSortArrows() {
     /*
         First find anchor by href pattern and set icon up or down for sorting direction wise
@@ -150,6 +158,7 @@ function SetSortArrows() {
     }
 }
 
+// when grid header anchor click for sorting then this code fire
 $(document).on('click', '.webgrid-header a', function () {
     var $form = $('form');
     if ($form.valid()) {
@@ -173,6 +182,7 @@ $(document).on('click', '.webgrid-header a', function () {
     return false;
 });
 
+// when grid footer pager's anchor click for paging then this code fire
 $(document).on('click', '.webgrid-footer a', function () {
     var $form = $('form');
     if ($form.valid()) {
@@ -183,6 +193,7 @@ $(document).on('click', '.webgrid-footer a', function () {
     return false;
 });
 
+//RefreshGrid just reload grid data
 function RefreshGrid() {
     var data = new Object();
     var Sortdir = $("#dir").val();
@@ -209,6 +220,7 @@ function RefreshGrid() {
     });
 }
 
+//SetUpLinks set ASC and DESC with header and pager link
 function SetUpLinks()
 {
     if ($('#dir').val() === 'ASC') {
@@ -228,28 +240,33 @@ function SetUpLinks()
     });
 
 }
+
+// this code attach lost focus with all textbox
 jQuery(document).on('blur', ".webgrid-table input[type=text]", function ()
 {
     var tableRow = $(this).closest('tr');
     handleLocalStore(tableRow,'UPDATE');
 });
 
-
+// this code attach keyup with all textbox
 jQuery(document).on('keyup', '.webgrid-table input[type=text]', function (ev) {
     var tableRow = $(this).closest('tr');
     handleLocalStore(tableRow, 'UPDATE');
 });
 
+// this code attach change event with city combo
 $(document).on('change', '[id*="cboCity"]', function () {
     var tableRow = $(this).closest('tr');
     handleLocalStore(tableRow,'UPDATE');
 });
 
+// this code attach click event with all combo
 $(document).on('click', '[id*="select"]', function () {
     var tableRow = $(this).closest('tr');
     handleLocalStore(tableRow,'UPDATE');
 });
 
+// this code attach change event with checkbox
 $(document).on('change', '[class*="box"]', function () {
     var tableRow = $(this).closest('tr');
     handleLocalStore(tableRow, 'UPDATE');
@@ -257,6 +274,7 @@ $(document).on('change', '[class*="box"]', function () {
 
 
 $(document).ready(function () {
+    //when user click on btnSaveAll button then this code will fire
     $("#btnSaveAll").click(function () {
         var $form = $('form');
         if ($form.valid()) {
@@ -270,6 +288,7 @@ $(document).ready(function () {
         return false;
     });
 
+    //when user click on add row button then this code will fire
     $("#btnAddRow").click(function () {
 
         var $form = $('form');
@@ -302,6 +321,7 @@ $(document).ready(function () {
 
 })
 
+//saveAll function will save data from local storage to db and clear array and local storage data
 function saveAll()
 {
     if (typeof (Storage) !== "undefined") {
@@ -310,7 +330,8 @@ function saveAll()
             var StudentArray = [];
             for (i = 0; i < Students.length; i++) {
                 var Student = Students[i];
-                StudentArray.push(PopulateStudent(Student.ID, Student.FirstName, Student.LastName, Student.StateID, Student.StateName, Student.CityID, Student.CityName, Student.IsActive));
+                StudentArray.push(PopulateStudent($.trim(Student.ID), $.trim(Student.FirstName), $.trim(Student.LastName)
+                    , $.trim(Student.StateID), $.trim(Student.StateName), $.trim(Student.CityID), $.trim(Student.CityName), $.trim(Student.IsActive)));
             }
 
             var Sortdir = $("#dir").val();
@@ -347,6 +368,7 @@ function saveAll()
     }
 }
 
+//set row editable from array just iterate in table
 function setEditableRow()
 {
     $("#StudentGrid > tbody  > tr").each(function () {
@@ -359,6 +381,7 @@ function setEditableRow()
     });
 }
 
+//handleLocalStore just insert/update and delete data in aray and save data to local storage
 function handleLocalStore(tableRow,action) {
 
     var ID = tableRow.find("input[id*='HiddenID']").val();
@@ -375,17 +398,18 @@ function handleLocalStore(tableRow,action) {
         var index = IndexOfArrayByKeyValue(Students, "ID", ID);
         if (action.toUpperCase() == 'UPDATE') {
             if (index == null) {
-                Students.push(PopulateStudent(ID, FirstName, LastName, StateID, StateName, CityID, CityName, IsActive));
+                Students.push(PopulateStudent($.trim(ID), $.trim(FirstName), $.trim(LastName),
+                    $.trim(StateID), $.trim(StateName), $.trim(CityID), $.trim(CityName), $.trim(IsActive)));
             }
             else {
-                Students[index].ID = ID;
-                Students[index].FirstName = FirstName;
-                Students[index].LastName = LastName;
-                Students[index].StateID = StateID;
-                Students[index].StateName = StateName;
-                Students[index].CityID = CityID;
-                Students[index].CityName = CityName;
-                Students[index].IsActive = IsActive;
+                Students[index].ID = $.trim(ID);
+                Students[index].FirstName = $.trim(FirstName);
+                Students[index].LastName = $.trim(LastName);
+                Students[index].StateID = $.trim(StateID);
+                Students[index].StateName = $.trim(StateName);
+                Students[index].CityID = $.trim(CityID);
+                Students[index].CityName = $.trim(CityName);
+                Students[index].IsActive = $.trim(IsActive);
             }
         }
         else if (action.toUpperCase() == 'DELETE') {
@@ -404,6 +428,7 @@ function handleLocalStore(tableRow,action) {
     }
 }
 
+// this function help to visualize local storage data
 function Show() {
     var theTable = document.createElement('table');
     Students = localStorage.getObject('Students');
@@ -441,6 +466,8 @@ function Show() {
     $("#Displaytable").html(theTable);
 }
 
+// when state dropdown will change then this function will be call to load state wise city data from db
+//and populate city dropdrown
 $(document).on('change', '[id*="cboState"]', function () {
     var tableRow = $(this).closest('tr');
     var cboCity = $(this).closest('tr').find("select[id*='cboCity']");
@@ -465,26 +492,28 @@ $(document).on('change', '[id*="cboState"]', function () {
     return false;
 });
 
+//HideToolTips function iterate in table row and destroy tooltip when not required
 function HideToolTips(tblRow) {
     $(document).ready(function () {
         $('#StudentGrid > tbody  > tr').each(function (i, row) {
             if (tblRow < 0) {
-                $(this).find("input[type='text'][id*='FirstName']").tooltip('hide');
-                $(this).find("input[type='text'][id*='LastName']").tooltip('hide');
-                $(this).find("select[id*='cboState']").tooltip('hide');
-                $(this).find("select[id*='cboCity']").tooltip('hide');
+                $(this).find("input[type='text'][id*='FirstName']").tooltip('destroy');
+                $(this).find("input[type='text'][id*='LastName']").tooltip('destroy');
+                $(this).find("select[id*='cboState']").tooltip('destroy');
+                $(this).find("select[id*='cboCity']").tooltip('destroy');
             }
             else if (tblRow == i) {
-                $(this).find("input[type='text'][id*='FirstName']").tooltip('hide');
-                $(this).find("input[type='text'][id*='LastName']").tooltip('hide');
-                $(this).find("select[id*='cboState']").tooltip('hide');
-                $(this).find("select[id*='cboCity']").tooltip('hide');
+                $(this).find("input[type='text'][id*='FirstName']").tooltip('destroy');
+                $(this).find("input[type='text'][id*='LastName']").tooltip('destroy');
+                $(this).find("select[id*='cboState']").tooltip('destroy');
+                $(this).find("select[id*='cboCity']").tooltip('destroy');
 
             }
         });
     });
 }
 
+// when user click on edit button
 $(function () {
     $(document).on('click', '.edit-user', function () {
         var tr = $(this).parents('tr:first');
@@ -512,6 +541,7 @@ $(function () {
         return false;
     });
 
+    // when user click on cancel button
     $(document).on('click', '.cancel-user', function () {
         var tr = $(this).parents('tr:first');
         HideToolTips($(tr).index());
@@ -555,6 +585,7 @@ $(function () {
         return false;
     });
 
+    // when user click on save button
     $(document).on('click', '.save-user', function () {
         var $form = $('form');
         if ($form.valid()) {
@@ -565,9 +596,9 @@ $(function () {
             var Sortcol = $("#col").val();
             var page = $("#page").val();
 
-            var ID = tr.find("input[id*='HiddenID']").val();
-            var FirstName = tr.find("input[type='text'][id*='FirstName']").val();
-            var LastName = tr.find("input[type='text'][id*='LastName']").val();
+            var ID = $.trim(tr.find("input[id*='HiddenID']").val());
+            var FirstName = $.trim(tr.find("input[type='text'][id*='FirstName']").val());
+            var LastName = $.trim(tr.find("input[type='text'][id*='LastName']").val());
             var StateID = tr.find("select[id*='cboState'] :selected").val();
             var StateName = tr.find("select[id*='cboState'] :selected").text();
             var CityID = tr.find("select[id*='cboCity'] :selected").val();
@@ -617,6 +648,7 @@ $(function () {
         return false;
     });
 
+    // when user click on delete button this function fire
     $(document).on('click', '.btnRed', function () {
         var tr = $(this).parents('tr:first');
         var Sortdir = $("#dir").val();
@@ -746,9 +778,9 @@ function IndexOfArrayByKeyValue(arraytosearch, key, valuetosearch) {
 
 function PopulateStudent(id, firstname, lastname, stateid, statename, cityid, cityname, isactive) {
     var Student = new Object();
-    Student.ID = id;
-    Student.FirstName = firstname;
-    Student.LastName = lastname;
+    Student.ID = $.trim(id);
+    Student.FirstName = $.trim(firstname);
+    Student.LastName = $.trim(lastname);
     Student.IsActive = isactive;
     Student.StateID = stateid;
     Student.StateName = statename;
