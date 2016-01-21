@@ -9,11 +9,10 @@ var _newRow = 0;
 //SetUpPagerUI function will restryle grid pager html.
 //this function will add ol,li inside pager html and add some 
 // css class to make pager look good.
-function SetUpPagerUI()
-{
-    var firstRecord=$('#firstRecord').val();
+function SetUpPagerUI() {
+    var firstRecord = $('#firstRecord').val();
     var lastRecord = $('#lastRecord').val();
-    var TotalRows=$('#TotalRows').val();
+    var TotalRows = $('#TotalRows').val();
 
     var $div = $('<div id="content" />');
     var $list = $('<ul class="paginate pag5 clearfix" />');
@@ -149,11 +148,11 @@ function SetSortArrows() {
     var col = $('#col').val();
     header = $('th a[href*=' + col + ']');
     if (dir == 'Ascending' || dir == 'ASC') {
-        header.text(header.text() + ' ▲');
+        header.text(header.text() + ' ?');
         //$("#dir").val('DESC')
     }
     if (dir == 'Descending' || dir == 'DESC') {
-        header.text(header.text() + ' ▼');
+        header.text(header.text() + ' ?');
         //$("#dir").val('ASC')
     }
 }
@@ -221,8 +220,7 @@ function RefreshGrid() {
 }
 
 //SetUpLinks set ASC and DESC with header and pager link
-function SetUpLinks()
-{
+function SetUpLinks() {
     if ($('#dir').val() === 'ASC') {
         header.attr('href', header.attr('href').replace('ASC', 'DESC'));
     }
@@ -242,10 +240,9 @@ function SetUpLinks()
 }
 
 // this code attach lost focus with all textbox
-jQuery(document).on('blur', ".webgrid-table input[type=text]", function ()
-{
+jQuery(document).on('blur', ".webgrid-table input[type=text]", function () {
     var tableRow = $(this).closest('tr');
-    handleLocalStore(tableRow,'UPDATE');
+    handleLocalStore(tableRow, 'UPDATE');
 });
 
 // this code attach keyup with all textbox
@@ -257,13 +254,13 @@ jQuery(document).on('keyup', '.webgrid-table input[type=text]', function (ev) {
 // this code attach change event with city combo
 $(document).on('change', '[id*="cboCity"]', function () {
     var tableRow = $(this).closest('tr');
-    handleLocalStore(tableRow,'UPDATE');
+    handleLocalStore(tableRow, 'UPDATE');
 });
 
 // this code attach click event with all combo
 $(document).on('click', '[id*="select"]', function () {
     var tableRow = $(this).closest('tr');
-    handleLocalStore(tableRow,'UPDATE');
+    handleLocalStore(tableRow, 'UPDATE');
 });
 
 // this code attach change event with checkbox
@@ -322,8 +319,7 @@ $(document).ready(function () {
 })
 
 //saveAll function will save data from local storage to db and clear array and local storage data
-function saveAll()
-{
+function saveAll() {
     if (typeof (Storage) !== "undefined") {
         Students = localStorage.getObject('Students');
         if (Students != null) {
@@ -369,10 +365,9 @@ function saveAll()
 }
 
 //set row editable from array just iterate in table
-function setEditableRow()
-{
+function setEditableRow() {
     $("#StudentGrid > tbody  > tr").each(function () {
-        var tr = $(this).closest('tr');
+        var tr = $(this);
         var ID = tr.find("input[id*='HiddenID']").val();
         var index = IndexOfArrayByKeyValue(Students, "ID", ID);
         if (index != null) {
@@ -382,7 +377,7 @@ function setEditableRow()
 }
 
 //handleLocalStore just insert/update and delete data in aray and save data to local storage
-function handleLocalStore(tableRow,action) {
+function handleLocalStore(tableRow, action) {
 
     var ID = tableRow.find("input[id*='HiddenID']").val();
     var FirstName = tableRow.find("input[type='text'][id*='FirstName']").val();
@@ -547,8 +542,8 @@ $(function () {
         HideToolTips($(tr).index());
         handleLocalStore(tr, 'DELETE');
         var ID = $(tr).find("input[id*='HiddenID']").val();
-        if (ID === '0')
-        {
+        if (ID === '0') {
+            _newRow = 0;
             tr.remove();
             return false;
         }
@@ -563,7 +558,7 @@ $(function () {
         $(tr).find("select[id*='cboCity']").val(cityid);
 
         $(tr).removeClass('Editing');
-        
+
         if ($(tr).find("td:nth-child(3)").hasClass('PadOff')) {
             $(tr).find("td:nth-child(1)").removeClass("PadOff");
             $(tr).find("td:nth-child(2)").removeClass("PadOff");
@@ -642,6 +637,8 @@ $(function () {
                     $(tr).find("td:nth-child(5)").addClass("PadOn");
                     $(tr).find("td:nth-child(6)").addClass("PadOn");
                     _newRow = 0;
+                    setEditableRow();
+
                 }
             });
         }
